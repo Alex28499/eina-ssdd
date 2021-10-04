@@ -6,7 +6,7 @@
 * FICHERO: server.go
 * DESCRIPCIÓN: contiene la funcionalidad esencial para realizar los servidores
 *				correspondientes a la práctica 1
-*/
+ */
 package main
 
 import (
@@ -14,9 +14,10 @@ import (
 	"fmt"
 	"net"
 	"os"
-	"io"
-	"./com"
+	"practica1/com"
 )
+
+const ()
 
 func checkError(err error) {
 	if err != nil {
@@ -49,13 +50,31 @@ func FindPrimes(interval com.TPInterval) (primes []int) {
 
 func main() {
 
-	listener, err := net.Listen(CONN_TYPE, CONN_HOST+":"+CONN_PORT)
+	if len(os.Args) < 2 || len(os.Args) >= 3 {
+		fmt.Fprintf(os.Stderr, "Usage: %s host:port", os.Args[0])
+		os.Exit(1)
+	}
+
+	CONN_TYPE := "tcp"
+	CONN_HOST_PORT := os.Args[1]
+
+	listener, err := net.Listen(CONN_TYPE, CONN_HOST_PORT)
 	checkError(err)
 
 	conn, err := listener.Accept()
 	defer conn.Close()
+	dec := gob.NewDecoder(conn)
+	enc := gob.NewEncoder(conn)
 	checkError(err)
-
-    // TO DO
+	for {
+		var buffer com.Request
+		dec.Decode(&buffer)
+		handleRequest(*enc, buffer)
+	}
 }
 
+func handleRequest(enc gob.Encoder, buffer com.Request) {
+	list := FindPrimes(buffer.Interval)
+	respuesta := com.Reply{Id: buffer.Id, Primes: list}
+	enc.Encode(respuesta)
+}
