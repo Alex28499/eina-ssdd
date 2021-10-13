@@ -10,20 +10,46 @@
 package main
 
 import (
+	"bufio"
 	"encoding/gob"
 	"fmt"
 	"net"
 	"os"
-	"os/exec"
 	"practica1/com"
+	"practica1/sshcom"
+	"strings"
+	"time"
 )
 
 const (
+	tts        = 1000
 	maxrequest = 3
 )
 
+func remoteExecution(IPHost string, comando string) {
+	s := strings.Split(IPHost, ":")
+	ssh, err := sshcom.NewSshClient(
+		"a760628",
+		s[0],
+		22,
+		"/home/a760628/.ssh/id_rsa",
+		//"/home/alejandro/.ssh/id_rsa",
+		"")
+
+	if err != nil {
+		fmt.Printf("SSH init error %v", err)
+	} else {
+		output, err := ssh.RunCommand(comando)
+		fmt.Println(output)
+		if err != nil {
+			fmt.Printf("SSH run command error %v", err)
+		}
+	}
+}
+
 var (
-	finrequest = make(chan string, maxrequest)
+	finrequest     = make(chan string, maxrequest)
+	requestbalacer = make(chan com.Request, 1)
 )
 
 func checkError(err error) {
@@ -51,21 +77,49 @@ func main() {
 	dec := gob.NewDecoder(conn)
 	enc := gob.NewEncoder(conn)
 	var buffer com.Request
-	initChannel()
+	initworkers(*enc)
 	checkError(err)
 	for {
 		<-finrequest
 		dec.Decode(&buffer)
-		go handleRequest(*enc, buffer)
+		requestbalacer <- buffer
+
 	}
 }
 
-func handleRequest(enc gob.Encoder, buffer com.Request) {
-	cmd := exec.Command("ssh", "127.0.0.0.1:25000", "mkdir hola")
+func handleRequest(ip string, cli gob.Encoder) {
+	tcpAddr, err := net.ResolveTCPAddr("tcp", ip)
+	checkError(err)
+
+	conn, err := net.DialTCP("tcp", nil, tcpAddr)
+	checkError(err)
+
+	var reply com.Reply
+	encoder := gob.NewEncoder(conn)
+	decoder := gob.NewDecoder(conn)
+
+	for {
+		peticion := <-requestbalacer
+		encoder.Encode(peticion)
+		err = decoder.Decode(&reply)
+		checkError(err)
+		finrequest <- "ok"
+	}
+
 }
 
-func initChannel() {
-	for i := 0; i < maxrequest; i++ {
+func initworkers(enc gob.Encoder) {
+	f, err := os.Open("worker.txt")
+	if err != nil {
+		checkError(err)
+	}
+	defer f.Close()
+	scanner := bufio.NewScanner(f)
+	for scanner.Scan() {
 		finrequest <- "ok"
+		comando := "cd practica1/MasterWorker/Worker && /usr/local/go/bin/go run worker.go " + scanner.Text()
+		go remoteExecution(scanner.Text(), comando)
+		time.Sleep(time.Duration(tts) * time.Millisecond)
+		go handleRequest(scanner.Text(), enc)
 	}
 }

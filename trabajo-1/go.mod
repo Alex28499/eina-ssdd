@@ -1,4 +1,4 @@
-module practica1
+module trabajo-1
 
 go 1.15
 

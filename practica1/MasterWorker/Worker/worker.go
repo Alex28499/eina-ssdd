@@ -17,13 +17,7 @@ import (
 	"practica1/com"
 )
 
-const (
-	maxrequest = 3
-)
-
-var (
-	finrequest = make(chan string, maxrequest)
-)
+const ()
 
 func checkError(err error) {
 	if err != nil {
@@ -71,13 +65,11 @@ func main() {
 	defer conn.Close()
 	dec := gob.NewDecoder(conn)
 	enc := gob.NewEncoder(conn)
-	var buffer com.Request
-	initChannel()
 	checkError(err)
 	for {
-		<-finrequest
+		var buffer com.Request
 		dec.Decode(&buffer)
-		go handleRequest(*enc, buffer)
+		handleRequest(*enc, buffer)
 	}
 }
 
@@ -85,11 +77,4 @@ func handleRequest(enc gob.Encoder, buffer com.Request) {
 	list := FindPrimes(buffer.Interval)
 	respuesta := com.Reply{Id: buffer.Id, Primes: list}
 	enc.Encode(respuesta)
-	finrequest <- "ok"
-}
-
-func initChannel() {
-	for i := 0; i < maxrequest; i++ {
-		finrequest <- "ok"
-	}
 }
