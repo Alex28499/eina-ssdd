@@ -14,6 +14,7 @@ import (
 	"net"
 	"os"
 	"practica1/com"
+	"strconv"
 	"time"
 )
 
@@ -76,18 +77,19 @@ func receiveReply(decoder *gob.Decoder, delChan chan com.TimeReply) {
 }
 
 func main() {
-	if len(os.Args) < 2 || len(os.Args) >= 3 {
-		fmt.Fprintf(os.Stderr, "Usage: %s host:port", os.Args[0])
+	if len(os.Args) < 5 || len(os.Args) >= 6 {
+		fmt.Fprintf(os.Stderr, "Usage: %s host:port numIt requestPerIt timeSleep", os.Args[0])
 		os.Exit(1)
 	}
 
 	CONN_TYPE := "tcp"
 	CONN_HOST_PORT := os.Args[1]
 
-	numIt := 10
-	requestTmp := 6
+	numIt, _ := strconv.Atoi(os.Args[2])
+	requestTmp, _ := strconv.Atoi(os.Args[3])
+	tts, _ := strconv.Atoi(os.Args[4]) // time to sleep between consecutive requests
+
 	interval := com.TPInterval{1000, 70000}
-	tts := 3000 // time to sleep between consecutive requests
 
 	tcpAddr, err := net.ResolveTCPAddr(CONN_TYPE, CONN_HOST_PORT)
 	checkError(err)
@@ -110,4 +112,6 @@ func main() {
 		}
 		time.Sleep(time.Duration(tts) * time.Millisecond)
 	}
+	time.Sleep(time.Duration(5000*10) * time.Millisecond)
+
 }

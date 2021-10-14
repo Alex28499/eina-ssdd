@@ -18,7 +18,7 @@ import (
 )
 
 const (
-	maxrequest = 3
+	maxrequest = 6
 )
 
 var (

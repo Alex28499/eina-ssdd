@@ -22,14 +22,15 @@ import (
 )
 
 const (
-	tts        = 1000
-	maxrequest = 3
+	tts        = 10000
+	maxrequest = 6
 )
 
 func remoteExecution(IPHost string, comando string) {
 	s := strings.Split(IPHost, ":")
 	ssh, err := sshcom.NewSshClient(
 		"a760628",
+		//"alejandro",
 		s[0],
 		22,
 		"/home/a760628/.ssh/id_rsa",
@@ -83,11 +84,11 @@ func main() {
 		<-finrequest
 		dec.Decode(&buffer)
 		requestbalacer <- buffer
-
 	}
 }
 
 func handleRequest(ip string, cli gob.Encoder) {
+	finrequest <- "ok"
 	tcpAddr, err := net.ResolveTCPAddr("tcp", ip)
 	checkError(err)
 
@@ -99,13 +100,25 @@ func handleRequest(ip string, cli gob.Encoder) {
 	decoder := gob.NewDecoder(conn)
 
 	for {
+
 		peticion := <-requestbalacer
 		encoder.Encode(peticion)
 		err = decoder.Decode(&reply)
 		checkError(err)
+		cli.Encode(reply)
 		finrequest <- "ok"
 	}
 
+}
+
+func setWorker(IPHost string, enc gob.Encoder) {
+	comando := "cd practica1/MasterWorker/Worker && /usr/local/go/bin/go run worker.go " + IPHost
+	//comando := "cd Uni/3º/SistemasDist/practicas/eina-ssdd/practica1/MasterWorker/Worker && /usr/local/go/bin/go run worker.go " + IPHost
+	go remoteExecution(IPHost, comando)
+	fmt.Printf("Lanzado: %s\n ", IPHost)
+	time.Sleep(time.Duration(tts) * time.Millisecond)
+	fmt.Printf("me despierto")
+	go handleRequest(IPHost, enc)
 }
 
 func initworkers(enc gob.Encoder) {
@@ -116,10 +129,6 @@ func initworkers(enc gob.Encoder) {
 	defer f.Close()
 	scanner := bufio.NewScanner(f)
 	for scanner.Scan() {
-		finrequest <- "ok"
-		comando := "cd practica1/MasterWorker/Worker && /usr/local/go/bin/go run worker.go " + scanner.Text()
-		go remoteExecution(scanner.Text(), comando)
-		time.Sleep(time.Duration(tts) * time.Millisecond)
-		go handleRequest(scanner.Text(), enc)
+		go setWorker(scanner.Text(), enc)
 	}
 }

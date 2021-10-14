@@ -10,21 +10,10 @@
 package main
 
 import (
-	"encoding/gob"
 	"fmt"
-	"net"
-	"os"
 	"practica1/com"
+	"time"
 )
-
-const ()
-
-func checkError(err error) {
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Fatal error: %s", err.Error())
-		os.Exit(1)
-	}
-}
 
 // PRE: verdad
 // POST: IsPrime devuelve verdad si n es primo y falso en caso contrario
@@ -49,31 +38,9 @@ func FindPrimes(interval com.TPInterval) (primes []int) {
 }
 
 func main() {
-
-	if len(os.Args) < 2 || len(os.Args) >= 3 {
-		fmt.Fprintf(os.Stderr, "Usage: %s host:port", os.Args[0])
-		os.Exit(1)
-	}
-
-	CONN_TYPE := "tcp"
-	CONN_HOST_PORT := os.Args[1]
-
-	listener, err := net.Listen(CONN_TYPE, CONN_HOST_PORT)
-	checkError(err)
-	conn, err := listener.Accept()
-	defer conn.Close()
-	dec := gob.NewDecoder(conn)
-	enc := gob.NewEncoder(conn)
-	checkError(err)
-	for {
-		var buffer com.Request
-		dec.Decode(&buffer)
-		handleRequest(*enc, buffer)
-	}
-}
-
-func handleRequest(enc gob.Encoder, buffer com.Request) {
-	list := FindPrimes(buffer.Interval)
-	respuesta := com.Reply{Id: buffer.Id, Primes: list}
-	enc.Encode(respuesta)
+	interval := com.TPInterval{1000, 70000}
+	auxI := time.Now()
+	FindPrimes(interval)
+	auxF := time.Now()
+	fmt.Printf("Tex: %v\n", auxF.Sub(auxI))
 }
