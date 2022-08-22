@@ -55,8 +55,8 @@ const Leader = 2
 // comprometidas, envía un AplicaOperacion, con cada una de ellas, al canal
 // "canalAplicar" (funcion NuevoNodo) de la maquina de estados
 type AplicaOperacion struct {
-	indice    int // en la entrada de registro
-	operacion interface{}
+	Indice    int // en la entrada de registro
+	Operacion interface{}
 }
 
 // Tipo de dato Go que representa un solo nodo (réplica) de raft
@@ -119,6 +119,8 @@ func NuevoNodo(nodos []string, yo int, canalAplicar chan AplicaOperacion) *NodoR
 	nr.canalLat = make(chan bool)
 	nr.replyVChan = make(chan RespuestaPeticionVoto, len(nr.nodos)-1)
 	nr.appendChan = make(chan AppendEntriesResponse, len(nr.nodos)-1)
+	nr.nextIndex = make([]int, len(nodos))
+	nr.matchIndex = make([]int, len(nodos))
 	nr.currentTerm = 0
 	nr.votedFor = -1
 	nr.comitIndex = 0
@@ -163,32 +165,6 @@ func (nr *NodoRaft) estadoActual() int { //Finished
 	return aux
 }
 
-// Metodo gestionRaft() utilizado para la gestion de la logica
-// del algoritmo
-
-func (nr *NodoRaft) gestionRaft() { //Finished
-	nr.logger.Println("gestionRaft()")
-	seed := rand.NewSource(time.Now().UnixNano())
-	rd := rand.New(seed)
-	timeout := time.Duration(rd.Intn(150)+150) * time.Millisecond
-	nr.logger.Println("Timeout: ", timeout)
-	for {
-
-		estado := nr.estadoActual()
-		switch estado {
-
-		case Candidato:
-			nr.iniciarElecion()
-		case Leader:
-			nr.logger.Println("Soy lider")
-			nr.AppendEntries()
-		default:
-			nr.logger.Println("NO deberia entrar aqui, estado desconocido")
-		}
-	}
-
-}
-
 func (nr *NodoRaft) gestionarSeguidor() {
 	nr.logger.Println("gestionarSeguidor()")
 	rand.Seed(time.Now().UnixNano())
@@ -211,6 +187,16 @@ func (nr *NodoRaft) gestionarCandidato() {
 	nr.currentTerm++
 	nr.votedFor = nr.yo
 	nr.mux.Unlock()
+}
+
+func (nr *NodoRaft) gestionLider() {
+	nr.logger.Println("Gestion lider")
+	for {
+		select {
+		case <-time.After(50 * time.Millisecond):
+			nr.AppendEntries()
+		}
+	}
 }
 
 // Metodo Para() utilizado cuando no se necesita mas al nodo
@@ -265,7 +251,7 @@ func (nr *NodoRaft) SometerOperacion(operacion interface{}) (int, int, bool) {
 	nr.mux.Unlock()
 	if EsLider {
 		nr.mux.Lock()
-
+		nr.log = append(nr.log, AplicaOperacion{nr.currentTerm, operacion})
 		nr.mux.Unlock()
 	}
 	return indice, mandato, EsLider
@@ -278,7 +264,7 @@ func min(a, b int) int {
 	return b
 }
 
-func (nr *NodoRaft) AppendEntry(args *AppendEntriesPeticion, reply *AppendEntriesResponse) {
+func (nr *NodoRaft) AppendEntry(args *AppendEntriesPeticion, reply *AppendEntriesResponse) error {
 	nr.logger.Println("AppendEntry()")
 	nr.mux.Lock()
 	if args.Term > nr.currentTerm {
@@ -293,6 +279,7 @@ func (nr *NodoRaft) AppendEntry(args *AppendEntriesPeticion, reply *AppendEntrie
 	} else {
 		reply.Success = true
 	}
+	return nil
 
 }
 
@@ -303,6 +290,7 @@ func (nr *NodoRaft) callAppendEntry(nodo int, request *AppendEntriesPeticion) {
 	checkError(err)
 	if cliente != nil {
 		err = rpctimeout.CallTimeout(cliente, "NodoRaft.AppendEntry", &request, &respuesta, 25*time.Millisecond)
+		nr.logger.Println("respuesta ", err)
 		if err == nil {
 			nr.appendChan <- *&respuesta
 		}
@@ -317,6 +305,7 @@ func (nr *NodoRaft) AppendEntries() {
 	newNextIdx := len(nr.log)
 	newMatchIdx := len(nr.log) - 1
 	for i := 0; i < len(nr.nodos); i++ {
+		nr.logger.Println("AppendEntrie for ", i)
 		nr.mux.Lock()
 		req := AppendEntriesPeticion{
 			Term:         nr.currentTerm,
@@ -333,8 +322,9 @@ func (nr *NodoRaft) AppendEntries() {
 		select {
 		case reply := <-nr.appendChan:
 			nr.mux.Lock()
+			nr.logger.Println("responde latido")
 			if reply.Success {
-
+				nr.logger.Println("responde Success")
 				nr.nextIndex[reply.SeguidorId] = newNextIdx
 				nr.matchIndex[reply.SeguidorId] = newMatchIdx
 
@@ -349,6 +339,7 @@ func (nr *NodoRaft) AppendEntries() {
 			}
 			nr.mux.Unlock()
 		case <-time.After(50 * time.Millisecond):
+			nr.logger.Println("latido timeout")
 		}
 	}
 }
@@ -413,7 +404,7 @@ func (nr *NodoRaft) iniciarElecion() {
 		Term:         nr.currentTerm,
 		CadidateId:   nr.yo,
 		LastLogIndex: nr.lastApplied,
-		LastLogTerm:  nr.log[nr.lastApplied].indice,
+		LastLogTerm:  nr.log[nr.lastApplied].Indice,
 	}
 	nr.mux.Unlock()
 	for i := 0; i < len(nr.nodos); i++ {
@@ -429,8 +420,8 @@ func (nr *NodoRaft) iniciarElecion() {
 		select {
 		case reply := <-nr.replyVChan:
 			nr.logger.Println("Respuesta")
-			if reply.Term >= nr.currentTerm {
-				nr.logger.Panicln(reply.Term, ">=", nr.currentTerm)
+			if reply.Term > nr.currentTerm {
+				nr.logger.Panicln(reply.Term, ">", nr.currentTerm)
 				nr.mux.Lock()
 				nr.currentTerm = reply.Term
 				nr.votedFor = -1
@@ -439,21 +430,25 @@ func (nr *NodoRaft) iniciarElecion() {
 				break
 			}
 			if reply.VoteGranded {
-				nr.logger.Panicln("Voto garantizado")
+				nr.logger.Println("Voto garantizado")
 				votosConfimados++
-				if votosConfimados >= len(nr.nodos)/2+1 {
+				if votosConfimados >= len(nr.nodos)/2 {
 					nr.mux.Lock()
 					nr.logger.Println("Soy leader ---------------------------->")
 					nr.estado = Leader
-					for i := 0; i <= len(nr.nodos); i++ {
-						nr.nextIndex[i] = nr.lastApplied + 1
-						nr.matchIndex[i] = 0
+					for i := 0; i < len(nr.nodos); i++ {
+						nr.logger.Println("Actualizacion ", nr.nextIndex[0])
+						nr.nextIndex[i] = len(nr.log)
+						nr.logger.Println("nextIndex ", i)
+						nr.matchIndex[i] = -1
 					}
 					nr.mux.Unlock()
-					break
+					nr.logger.Println("Pre goroutine")
+					nr.gestionLider()
 				}
-			}
 
+			}
+			break
 		case <-time.After(time.Duration(rand.Intn(maxTimeout-minTimeout)+minTimeout) * time.Millisecond):
 			nr.logger.Printf("Salto timeout\n")
 			break
