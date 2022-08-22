@@ -119,14 +119,19 @@ func NuevoNodo(nodos []string, yo int, canalAplicar chan AplicaOperacion) *NodoR
 	nr.canalLat = make(chan bool)
 	nr.replyVChan = make(chan RespuestaPeticionVoto, len(nr.nodos)-1)
 	nr.appendChan = make(chan AppendEntriesResponse, len(nr.nodos)-1)
-	nr.currentTerm = 0 //TODO::mirar inicializacion
+	nr.currentTerm = 0
 	nr.votedFor = -1
 	nr.comitIndex = 0
 	nr.lastApplied = 0
 	nr.log = []AplicaOperacion{{0, nil}}
+	nr.iniciarLogger(nodos[yo])
+	go nr.gestionarSeguidor()
+	return nr
+}
 
+func (nr *NodoRaft) iniciarLogger(yo string) {
 	if kEnableDebugLogs {
-		nombreNodo := nodos[yo]
+		nombreNodo := yo
 		logPrefix := fmt.Sprintf("%s ", nombreNodo)
 		if kLogToStdout {
 			nr.logger = log.New(os.Stdout, nombreNodo,
@@ -147,8 +152,6 @@ func NuevoNodo(nodos []string, yo int, canalAplicar chan AplicaOperacion) *NodoR
 	} else {
 		nr.logger = log.New(ioutil.Discard, "", 0)
 	}
-	go nr.gestionarSeguidor()
-	return nr
 }
 
 //Funcion atomica para conocer estado actual nodo
@@ -182,16 +185,14 @@ func (nr *NodoRaft) gestionRaft() { //Finished
 		default:
 			nr.logger.Println("NO deberia entrar aqui, estado desconocido")
 		}
-
 	}
 
 }
 
 func (nr *NodoRaft) gestionarSeguidor() {
 	nr.logger.Println("gestionarSeguidor()")
-	seed := rand.NewSource(time.Now().UnixNano())
-	rd := rand.New(seed)
-	timeout := time.Duration(rd.Intn(150)+150) * time.Millisecond
+	rand.Seed(time.Now().UnixNano())
+	timeout := time.Duration(rand.Intn(150)+150) * time.Millisecond
 	nr.logger.Println("Timeout ", timeout)
 	for {
 		select {
@@ -404,31 +405,32 @@ type RespuestaPeticionVoto struct { //Finished
 
 func (nr *NodoRaft) iniciarElecion() {
 	nr.logger.Println("iniciarElecion()")
+	rand.Seed(time.Now().UnixNano())
 	nr.gestionarCandidato()
+	votosConfimados := 1
 	nr.mux.Lock()
-	req := ArgsPeticionVoto{
+	req := &ArgsPeticionVoto{
 		Term:         nr.currentTerm,
 		CadidateId:   nr.yo,
 		LastLogIndex: nr.lastApplied,
 		LastLogTerm:  nr.log[nr.lastApplied].indice,
 	}
 	nr.mux.Unlock()
-	votosConfimados := 1
 	for i := 0; i < len(nr.nodos); i++ {
 		if i != nr.yo {
-			var resp RespuestaPeticionVoto
-			go nr.enviarPeticionVoto(i, &req, &resp)
+			resp := &RespuestaPeticionVoto{}
+			go nr.enviarPeticionVoto(i, req, resp)
 		}
 	}
 	minTimeout := 300
 	maxTimeout := 600
 	for {
-		//nr.logger.Println("Espero respuesta")
-
+		nr.logger.Println("Espero respuesta")
 		select {
 		case reply := <-nr.replyVChan:
 			nr.logger.Println("Respuesta")
 			if reply.Term >= nr.currentTerm {
+				nr.logger.Panicln(reply.Term, ">=", nr.currentTerm)
 				nr.mux.Lock()
 				nr.currentTerm = reply.Term
 				nr.votedFor = -1
@@ -437,9 +439,11 @@ func (nr *NodoRaft) iniciarElecion() {
 				break
 			}
 			if reply.VoteGranded {
+				nr.logger.Panicln("Voto garantizado")
 				votosConfimados++
 				if votosConfimados >= len(nr.nodos)/2+1 {
 					nr.mux.Lock()
+					nr.logger.Println("Soy leader ---------------------------->")
 					nr.estado = Leader
 					for i := 0; i <= len(nr.nodos); i++ {
 						nr.nextIndex[i] = nr.lastApplied + 1
@@ -451,7 +455,7 @@ func (nr *NodoRaft) iniciarElecion() {
 			}
 
 		case <-time.After(time.Duration(rand.Intn(maxTimeout-minTimeout)+minTimeout) * time.Millisecond):
-			//nr.logger.Printf("Salto timeout\n")
+			nr.logger.Printf("Salto timeout\n")
 			break
 		}
 	}
@@ -464,7 +468,7 @@ func (nr *NodoRaft) iniciarElecion() {
 //
 // Metodo para RPC PedirVoto
 //
-func (nr *NodoRaft) PedirVoto(args *ArgsPeticionVoto, reply *RespuestaPeticionVoto) {
+func (nr *NodoRaft) PedirVoto(args *ArgsPeticionVoto, reply *RespuestaPeticionVoto) error {
 	nr.mux.Lock()
 	defer nr.mux.Unlock()
 	nr.logger.Printf("PedirVoto()")
@@ -480,8 +484,8 @@ func (nr *NodoRaft) PedirVoto(args *ArgsPeticionVoto, reply *RespuestaPeticionVo
 	} else {
 		reply.Term = nr.currentTerm
 		reply.VoteGranded = false
-
 	}
+	return nil
 
 }
 
@@ -513,26 +517,20 @@ func (nr *NodoRaft) PedirVoto(args *ArgsPeticionVoto, reply *RespuestaPeticionVo
 // y no la estructura misma.
 //
 func (nr *NodoRaft) enviarPeticionVoto(nodo int, args *ArgsPeticionVoto,
-	reply *RespuestaPeticionVoto) bool {
+	reply *RespuestaPeticionVoto) {
 
 	nr.logger.Println("enviarPeticionVoto()")
-
-	enviado := false
-
 	node, _ := rpc.Dial("tcp", nr.nodos[nodo])
-
 	if node != nil {
-		nr.logger.Println("Enviando peticion ", nr.nodos[nodo])
-		ok := rpctimeout.CallTimeout(node, "NodoRaft.PedirVoto", args, reply, 50*time.Millisecond)
+		nr.logger.Println("Enviando peticion ", nr.nodos[nodo], args)
+		ok := rpctimeout.CallTimeout(node, "NodoRaft.PedirVoto", &args, &reply, 150*time.Millisecond)
+		nr.logger.Println("Me ha respondido", ok)
 		if ok == nil {
-			nr.logger.Println("Me ha respondido")
+			nr.logger.Println("No hay error", reply)
 			nr.replyVChan <- *reply
-			enviado = true
 		}
 		node.Close()
 	}
-
-	return enviado
 }
 
 func checkError(err error) {
