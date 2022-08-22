@@ -22,8 +22,12 @@ import (
 )
 
 const (
-	tts        = 10000
+	tts        = 15000
 	maxrequest = 6
+)
+
+var (
+	finreply = make(chan com.Reply, maxrequest)
 )
 
 func remoteExecution(IPHost string, comando string) {
@@ -73,12 +77,13 @@ func main() {
 	listener, err := net.Listen(CONN_TYPE, CONN_HOST_PORT)
 	checkError(err)
 
+	initworkers()
 	conn, err := listener.Accept()
 	defer conn.Close()
 	dec := gob.NewDecoder(conn)
 	enc := gob.NewEncoder(conn)
 	var buffer com.Request
-	initworkers(*enc)
+	go handleResponse(*enc)
 	checkError(err)
 	for {
 		<-finrequest
@@ -87,7 +92,15 @@ func main() {
 	}
 }
 
-func handleRequest(ip string, cli gob.Encoder) {
+func handleResponse(enc gob.Encoder) {
+	for {
+		reply := <-finreply
+		enc.Encode(reply)
+	}
+
+}
+
+func handleRequest(ip string) {
 	finrequest <- "ok"
 	tcpAddr, err := net.ResolveTCPAddr("tcp", ip)
 	checkError(err)
@@ -105,23 +118,23 @@ func handleRequest(ip string, cli gob.Encoder) {
 		encoder.Encode(peticion)
 		err = decoder.Decode(&reply)
 		checkError(err)
-		cli.Encode(reply)
+		finreply <- reply
 		finrequest <- "ok"
 	}
 
 }
 
-func setWorker(IPHost string, enc gob.Encoder) {
+func setWorker(IPHost string) {
 	comando := "cd practica1/MasterWorker/Worker && /usr/local/go/bin/go run worker.go " + IPHost
 	//comando := "cd Uni/3º/SistemasDist/practicas/eina-ssdd/practica1/MasterWorker/Worker && /usr/local/go/bin/go run worker.go " + IPHost
 	go remoteExecution(IPHost, comando)
 	fmt.Printf("Lanzado: %s\n ", IPHost)
 	time.Sleep(time.Duration(tts) * time.Millisecond)
 	fmt.Printf("me despierto")
-	go handleRequest(IPHost, enc)
+	go handleRequest(IPHost)
 }
 
-func initworkers(enc gob.Encoder) {
+func initworkers() {
 	f, err := os.Open("worker.txt")
 	if err != nil {
 		checkError(err)
@@ -129,6 +142,6 @@ func initworkers(enc gob.Encoder) {
 	defer f.Close()
 	scanner := bufio.NewScanner(f)
 	for scanner.Scan() {
-		go setWorker(scanner.Text(), enc)
+		go setWorker(scanner.Text())
 	}
 }

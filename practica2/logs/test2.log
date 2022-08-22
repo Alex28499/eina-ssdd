@@ -1,0 +1,610 @@
+(?<host>\S*) (?<clock>{.*})\n(?<event>.*)
+
+Proceso_1 {"Proceso_1":1}
+Initialization Complete
+Proceso_1 {"Proceso_1":2}
+INFO Sending Message WRITE
+Proceso_1 {"Proceso_1":3}
+INFO Sending Message WRITE
+Proceso_1 {"Proceso_1":4}
+INFO Sending Message WRITE
+Proceso_1 {"Proceso_2":2, "Proceso_1":5}
+INFO Receiving Message
+Proceso_1 {"Proceso_1":6, "Proceso_2":4}
+INFO Receiving Message
+Proceso_1 {"Proceso_1":7, "Proceso_2":4, "Proceso_4":4}
+INFO Receiving Message
+Proceso_1 {"Proceso_1":8, "Proceso_2":4, "Proceso_4":4}
+INFO Receiving Message
+Proceso_1 {"Proceso_1":9, "Proceso_2":4, "Proceso_4":4, "Proceso_3":2}
+INFO Receiving Message
+Proceso_1 {"Proceso_1":10, "Proceso_2":4, "Proceso_4":4, "Proceso_3":4}
+INFO Receiving Message
+Proceso_1 {"Proceso_3":4, "Proceso_1":11, "Proceso_2":4, "Proceso_4":4}
+INFO Sending Message toall
+Proceso_1 {"Proceso_1":12, "Proceso_2":4, "Proceso_4":4, "Proceso_3":4}
+INFO Sending Message toall
+Proceso_1 {"Proceso_1":13, "Proceso_2":4, "Proceso_4":4, "Proceso_3":4}
+INFO Sending Message toall
+Proceso_1 {"Proceso_1":14, "Proceso_2":4, "Proceso_4":4, "Proceso_3":4}
+INFO Sending Message reply
+Proceso_1 {"Proceso_2":4, "Proceso_4":4, "Proceso_3":4, "Proceso_1":15}
+INFO Sending Message reply
+Proceso_1 {"Proceso_1":16, "Proceso_2":4, "Proceso_4":4, "Proceso_3":4}
+INFO Sending Message reply
+Proceso_1 {"Proceso_3":4, "Proceso_1":17, "Proceso_2":4, "Proceso_4":4}
+INFO Sending Message WRITE
+Proceso_1 {"Proceso_1":18, "Proceso_2":4, "Proceso_4":4, "Proceso_3":4}
+INFO Sending Message WRITE
+Proceso_1 {"Proceso_1":19, "Proceso_2":4, "Proceso_4":4, "Proceso_3":4}
+INFO Sending Message WRITE
+Proceso_1 {"Proceso_2":14, "Proceso_4":7, "Proceso_3":7, "Proceso_1":20}
+INFO Receiving Message
+Proceso_1 {"Proceso_3":7, "Proceso_1":21, "Proceso_2":17, "Proceso_4":7}
+INFO Receiving Message
+Proceso_1 {"Proceso_4":7, "Proceso_3":7, "Proceso_1":22, "Proceso_2":20}
+INFO Receiving Message
+Proceso_1 {"Proceso_4":10, "Proceso_3":18, "Proceso_1":23, "Proceso_2":21}
+INFO Receiving Message
+Proceso_1 {"Proceso_1":24, "Proceso_2":22, "Proceso_4":18, "Proceso_3":18}
+INFO Receiving Message
+Proceso_1 {"Proceso_1":25, "Proceso_2":22, "Proceso_4":20, "Proceso_3":18}
+INFO Receiving Message
+Proceso_1 {"Proceso_4":20, "Proceso_3":20, "Proceso_1":26, "Proceso_2":22}
+INFO Receiving Message
+Proceso_1 {"Proceso_4":20, "Proceso_3":20, "Proceso_1":27, "Proceso_2":22}
+INFO Sending Message toall
+Proceso_1 {"Proceso_1":28, "Proceso_2":22, "Proceso_4":20, "Proceso_3":20}
+INFO Sending Message toall
+Proceso_1 {"Proceso_1":29, "Proceso_2":22, "Proceso_4":20, "Proceso_3":20}
+INFO Sending Message toall
+Proceso_1 {"Proceso_1":30, "Proceso_2":22, "Proceso_4":20, "Proceso_3":20}
+INFO Sending Message reply
+Proceso_1 {"Proceso_1":31, "Proceso_2":22, "Proceso_4":20, "Proceso_3":20}
+INFO Sending Message reply
+Proceso_1 {"Proceso_1":32, "Proceso_2":22, "Proceso_4":20, "Proceso_3":20}
+INFO Sending Message reply
+Proceso_1 {"Proceso_1":33, "Proceso_2":22, "Proceso_4":20, "Proceso_3":20}
+INFO Sending Message WRITE
+Proceso_1 {"Proceso_1":34, "Proceso_2":22, "Proceso_4":20, "Proceso_3":20}
+INFO Sending Message WRITE
+Proceso_1 {"Proceso_1":35, "Proceso_2":22, "Proceso_4":20, "Proceso_3":20}
+INFO Sending Message WRITE
+Proceso_1 {"Proceso_1":36, "Proceso_2":30, "Proceso_4":21, "Proceso_3":21}
+INFO Receiving Message
+Proceso_1 {"Proceso_1":37, "Proceso_2":33, "Proceso_4":21, "Proceso_3":21}
+INFO Receiving Message
+Proceso_1 {"Proceso_1":38, "Proceso_2":36, "Proceso_4":21, "Proceso_3":21}
+INFO Receiving Message
+Proceso_1 {"Proceso_1":39, "Proceso_2":37, "Proceso_4":24, "Proceso_3":32}
+INFO Receiving Message
+Proceso_1 {"Proceso_1":40, "Proceso_2":38, "Proceso_4":32, "Proceso_3":32}
+INFO Receiving Message
+Proceso_1 {"Proceso_1":41, "Proceso_2":38, "Proceso_4":32, "Proceso_3":34}
+INFO Receiving Message
+Proceso_1 {"Proceso_1":42, "Proceso_2":38, "Proceso_4":34, "Proceso_3":34}
+INFO Receiving Message
+Proceso_1 {"Proceso_1":43, "Proceso_2":38, "Proceso_4":34, "Proceso_3":34}
+INFO Sending Message toall
+Proceso_1 {"Proceso_1":44, "Proceso_2":38, "Proceso_4":34, "Proceso_3":34}
+INFO Sending Message toall
+Proceso_1 {"Proceso_1":45, "Proceso_2":38, "Proceso_4":34, "Proceso_3":34}
+INFO Sending Message toall
+Proceso_1 {"Proceso_1":46, "Proceso_2":38, "Proceso_4":34, "Proceso_3":34}
+INFO Sending Message reply
+Proceso_1 {"Proceso_1":47, "Proceso_2":38, "Proceso_4":34, "Proceso_3":34}
+INFO Sending Message reply
+Proceso_1 {"Proceso_3":34, "Proceso_1":48, "Proceso_2":38, "Proceso_4":34}
+INFO Sending Message reply
+Proceso_1 {"Proceso_4":34, "Proceso_3":34, "Proceso_1":49, "Proceso_2":38}
+INFO Sending Message WRITE
+Proceso_1 {"Proceso_1":50, "Proceso_2":38, "Proceso_4":34, "Proceso_3":34}
+INFO Sending Message WRITE
+Proceso_1 {"Proceso_3":34, "Proceso_1":51, "Proceso_2":38, "Proceso_4":34}
+INFO Sending Message WRITE
+Proceso_1 {"Proceso_2":46, "Proceso_4":35, "Proceso_3":35, "Proceso_1":52}
+INFO Receiving Message
+Proceso_1 {"Proceso_1":53, "Proceso_2":49, "Proceso_4":35, "Proceso_3":35}
+INFO Receiving Message
+Proceso_1 {"Proceso_3":35, "Proceso_1":54, "Proceso_2":52, "Proceso_4":35}
+INFO Receiving Message
+Proceso_1 {"Proceso_1":55, "Proceso_2":53, "Proceso_4":38, "Proceso_3":46}
+INFO Receiving Message
+Proceso_1 {"Proceso_2":54, "Proceso_4":46, "Proceso_3":46, "Proceso_1":56}
+INFO Receiving Message
+Proceso_1 {"Proceso_1":57, "Proceso_2":54, "Proceso_4":46, "Proceso_3":48}
+INFO Receiving Message
+Proceso_1 {"Proceso_1":58, "Proceso_2":54, "Proceso_4":48, "Proceso_3":48}
+INFO Receiving Message
+Proceso_1 {"Proceso_1":59, "Proceso_2":54, "Proceso_4":48, "Proceso_3":48}
+INFO Sending Message toall
+Proceso_1 {"Proceso_3":48, "Proceso_1":60, "Proceso_2":54, "Proceso_4":48}
+INFO Sending Message toall
+Proceso_1 {"Proceso_1":61, "Proceso_2":54, "Proceso_4":48, "Proceso_3":48}
+INFO Sending Message toall
+Proceso_1 {"Proceso_4":48, "Proceso_3":48, "Proceso_1":62, "Proceso_2":54}
+INFO Sending Message reply
+Proceso_1 {"Proceso_1":63, "Proceso_2":54, "Proceso_4":48, "Proceso_3":48}
+INFO Sending Message reply
+Proceso_1 {"Proceso_1":64, "Proceso_2":54, "Proceso_4":48, "Proceso_3":48}
+INFO Sending Message reply
+Proceso_1 {"Proceso_4":48, "Proceso_3":48, "Proceso_1":65, "Proceso_2":54}
+INFO Sending Message WRITE
+Proceso_1 {"Proceso_1":66, "Proceso_2":54, "Proceso_4":48, "Proceso_3":48}
+INFO Sending Message WRITE
+Proceso_1 {"Proceso_2":54, "Proceso_4":48, "Proceso_3":48, "Proceso_1":67}
+INFO Sending Message WRITE
+Proceso_1 {"Proceso_1":68, "Proceso_2":62, "Proceso_4":49, "Proceso_3":49}
+INFO Receiving Message
+Proceso_1 {"Proceso_1":69, "Proceso_2":65, "Proceso_4":49, "Proceso_3":49}
+INFO Receiving Message
+Proceso_1 {"Proceso_1":70, "Proceso_2":68, "Proceso_4":49, "Proceso_3":49}
+INFO Receiving Message
+Proceso_1 {"Proceso_3":60, "Proceso_1":71, "Proceso_2":69, "Proceso_4":52}
+INFO Receiving Message
+Proceso_1 {"Proceso_1":72, "Proceso_2":70, "Proceso_4":60, "Proceso_3":60}
+INFO Receiving Message
+Proceso_1 {"Proceso_1":73, "Proceso_2":70, "Proceso_4":60, "Proceso_3":62}
+INFO Receiving Message
+Proceso_1 {"Proceso_3":62, "Proceso_1":74, "Proceso_2":70, "Proceso_4":62}
+INFO Receiving Message
+Proceso_1 {"Proceso_2":70, "Proceso_4":62, "Proceso_3":62, "Proceso_1":75}
+INFO Sending Message toall
+Proceso_1 {"Proceso_1":76, "Proceso_2":70, "Proceso_4":62, "Proceso_3":62}
+INFO Sending Message toall
+Proceso_1 {"Proceso_1":77, "Proceso_2":70, "Proceso_4":62, "Proceso_3":62}
+INFO Sending Message toall
+Proceso_1 {"Proceso_1":78, "Proceso_2":70, "Proceso_4":62, "Proceso_3":62}
+INFO Sending Message reply
+Proceso_1 {"Proceso_4":62, "Proceso_3":62, "Proceso_1":79, "Proceso_2":70}
+INFO Sending Message reply
+Proceso_1 {"Proceso_3":62, "Proceso_1":80, "Proceso_2":70, "Proceso_4":62}
+INFO Sending Message reply
+Proceso_1 {"Proceso_3":63, "Proceso_1":81, "Proceso_2":77, "Proceso_4":63}
+INFO Receiving Message
+Proceso_2 {"Proceso_2":1}
+Initialization Complete
+Proceso_2 {"Proceso_2":2}
+INFO Sending Message WRITE
+Proceso_2 {"Proceso_2":3, "Proceso_1":2}
+INFO Receiving Message
+Proceso_2 {"Proceso_2":4, "Proceso_1":2}
+INFO Sending Message reply
+Proceso_2 {"Proceso_2":5, "Proceso_1":2}
+INFO Sending Message WRITE
+Proceso_2 {"Proceso_2":6, "Proceso_1":2}
+INFO Sending Message WRITE
+Proceso_2 {"Proceso_2":7, "Proceso_1":4, "Proceso_4":5}
+INFO Receiving Message
+Proceso_2 {"Proceso_2":8, "Proceso_1":4, "Proceso_4":7}
+INFO Receiving Message
+Proceso_2 {"Proceso_3":5, "Proceso_2":9, "Proceso_1":4, "Proceso_4":7}
+INFO Receiving Message
+Proceso_2 {"Proceso_4":7, "Proceso_3":7, "Proceso_2":10, "Proceso_1":4}
+INFO Receiving Message
+Proceso_2 {"Proceso_2":11, "Proceso_1":11, "Proceso_4":7, "Proceso_3":7}
+INFO Receiving Message
+Proceso_2 {"Proceso_2":12, "Proceso_1":14, "Proceso_4":7, "Proceso_3":7}
+INFO Receiving Message
+Proceso_2 {"Proceso_3":7, "Proceso_2":13, "Proceso_1":17, "Proceso_4":7}
+INFO Receiving Message
+Proceso_2 {"Proceso_3":7, "Proceso_2":14, "Proceso_1":17, "Proceso_4":7}
+INFO Sending Message toall
+Proceso_2 {"Proceso_4":7, "Proceso_3":7, "Proceso_2":15, "Proceso_1":17}
+INFO Sending Message toall
+Proceso_2 {"Proceso_1":17, "Proceso_4":7, "Proceso_3":7, "Proceso_2":16}
+INFO Sending Message toall
+Proceso_2 {"Proceso_2":17, "Proceso_1":17, "Proceso_4":7, "Proceso_3":7}
+INFO Sending Message reply
+Proceso_2 {"Proceso_1":17, "Proceso_4":7, "Proceso_3":7, "Proceso_2":18}
+INFO Sending Message reply
+Proceso_2 {"Proceso_1":17, "Proceso_4":7, "Proceso_3":7, "Proceso_2":19}
+INFO Sending Message reply
+Proceso_2 {"Proceso_4":7, "Proceso_3":7, "Proceso_2":20, "Proceso_1":17}
+INFO Sending Message WRITE
+Proceso_2 {"Proceso_3":7, "Proceso_2":21, "Proceso_1":17, "Proceso_4":7}
+INFO Sending Message WRITE
+Proceso_2 {"Proceso_1":17, "Proceso_4":7, "Proceso_3":7, "Proceso_2":22}
+INFO Sending Message WRITE
+Proceso_2 {"Proceso_3":10, "Proceso_2":23, "Proceso_1":19, "Proceso_4":19}
+INFO Receiving Message
+Proceso_2 {"Proceso_2":24, "Proceso_1":19, "Proceso_4":19, "Proceso_3":19}
+INFO Receiving Message
+Proceso_2 {"Proceso_2":25, "Proceso_1":19, "Proceso_4":21, "Proceso_3":19}
+INFO Receiving Message
+Proceso_2 {"Proceso_1":19, "Proceso_4":21, "Proceso_3":21, "Proceso_2":26}
+INFO Receiving Message
+Proceso_2 {"Proceso_2":27, "Proceso_1":27, "Proceso_4":21, "Proceso_3":21}
+INFO Receiving Message
+Proceso_2 {"Proceso_4":21, "Proceso_3":21, "Proceso_2":28, "Proceso_1":30}
+INFO Receiving Message
+Proceso_2 {"Proceso_2":29, "Proceso_1":33, "Proceso_4":21, "Proceso_3":21}
+INFO Receiving Message
+Proceso_2 {"Proceso_3":21, "Proceso_2":30, "Proceso_1":33, "Proceso_4":21}
+INFO Sending Message toall
+Proceso_2 {"Proceso_4":21, "Proceso_3":21, "Proceso_2":31, "Proceso_1":33}
+INFO Sending Message toall
+Proceso_2 {"Proceso_3":21, "Proceso_2":32, "Proceso_1":33, "Proceso_4":21}
+INFO Sending Message toall
+Proceso_2 {"Proceso_1":33, "Proceso_4":21, "Proceso_3":21, "Proceso_2":33}
+INFO Sending Message reply
+Proceso_2 {"Proceso_2":34, "Proceso_1":33, "Proceso_4":21, "Proceso_3":21}
+INFO Sending Message reply
+Proceso_2 {"Proceso_4":21, "Proceso_3":21, "Proceso_2":35, "Proceso_1":33}
+INFO Sending Message reply
+Proceso_2 {"Proceso_2":36, "Proceso_1":33, "Proceso_4":21, "Proceso_3":21}
+INFO Sending Message WRITE
+Proceso_2 {"Proceso_2":37, "Proceso_1":33, "Proceso_4":21, "Proceso_3":21}
+INFO Sending Message WRITE
+Proceso_2 {"Proceso_2":38, "Proceso_1":33, "Proceso_4":21, "Proceso_3":21}
+INFO Sending Message WRITE
+Proceso_2 {"Proceso_3":33, "Proceso_2":39, "Proceso_1":34, "Proceso_4":24}
+INFO Receiving Message
+Proceso_2 {"Proceso_3":33, "Proceso_2":40, "Proceso_1":35, "Proceso_4":33}
+INFO Receiving Message
+Proceso_2 {"Proceso_2":41, "Proceso_1":35, "Proceso_4":35, "Proceso_3":33}
+INFO Receiving Message
+Proceso_2 {"Proceso_2":42, "Proceso_1":35, "Proceso_4":35, "Proceso_3":35}
+INFO Receiving Message
+Proceso_2 {"Proceso_2":43, "Proceso_1":43, "Proceso_4":35, "Proceso_3":35}
+INFO Receiving Message
+Proceso_2 {"Proceso_2":44, "Proceso_1":46, "Proceso_4":35, "Proceso_3":35}
+INFO Receiving Message
+Proceso_2 {"Proceso_4":35, "Proceso_3":35, "Proceso_2":45, "Proceso_1":49}
+INFO Receiving Message
+Proceso_2 {"Proceso_2":46, "Proceso_1":49, "Proceso_4":35, "Proceso_3":35}
+INFO Sending Message toall
+Proceso_2 {"Proceso_2":47, "Proceso_1":49, "Proceso_4":35, "Proceso_3":35}
+INFO Sending Message toall
+Proceso_2 {"Proceso_2":48, "Proceso_1":49, "Proceso_4":35, "Proceso_3":35}
+INFO Sending Message toall
+Proceso_2 {"Proceso_2":49, "Proceso_1":49, "Proceso_4":35, "Proceso_3":35}
+INFO Sending Message reply
+Proceso_2 {"Proceso_2":50, "Proceso_1":49, "Proceso_4":35, "Proceso_3":35}
+INFO Sending Message reply
+Proceso_2 {"Proceso_2":51, "Proceso_1":49, "Proceso_4":35, "Proceso_3":35}
+INFO Sending Message reply
+Proceso_2 {"Proceso_2":52, "Proceso_1":49, "Proceso_4":35, "Proceso_3":35}
+INFO Sending Message WRITE
+Proceso_2 {"Proceso_2":53, "Proceso_1":49, "Proceso_4":35, "Proceso_3":35}
+INFO Sending Message WRITE
+Proceso_2 {"Proceso_2":54, "Proceso_1":49, "Proceso_4":35, "Proceso_3":35}
+INFO Sending Message WRITE
+Proceso_2 {"Proceso_1":50, "Proceso_4":38, "Proceso_3":47, "Proceso_2":55}
+INFO Receiving Message
+Proceso_2 {"Proceso_2":56, "Proceso_1":51, "Proceso_4":47, "Proceso_3":47}
+INFO Receiving Message
+Proceso_2 {"Proceso_2":57, "Proceso_1":51, "Proceso_4":47, "Proceso_3":49}
+INFO Receiving Message
+Proceso_2 {"Proceso_2":58, "Proceso_1":51, "Proceso_4":49, "Proceso_3":49}
+INFO Receiving Message
+Proceso_2 {"Proceso_2":59, "Proceso_1":59, "Proceso_4":49, "Proceso_3":49}
+INFO Receiving Message
+Proceso_2 {"Proceso_2":60, "Proceso_1":62, "Proceso_4":49, "Proceso_3":49}
+INFO Receiving Message
+Proceso_2 {"Proceso_2":61, "Proceso_1":65, "Proceso_4":49, "Proceso_3":49}
+INFO Receiving Message
+Proceso_2 {"Proceso_2":62, "Proceso_1":65, "Proceso_4":49, "Proceso_3":49}
+INFO Sending Message toall
+Proceso_2 {"Proceso_2":63, "Proceso_1":65, "Proceso_4":49, "Proceso_3":49}
+INFO Sending Message toall
+Proceso_2 {"Proceso_2":64, "Proceso_1":65, "Proceso_4":49, "Proceso_3":49}
+INFO Sending Message toall
+Proceso_2 {"Proceso_2":65, "Proceso_1":65, "Proceso_4":49, "Proceso_3":49}
+INFO Sending Message reply
+Proceso_2 {"Proceso_2":66, "Proceso_1":65, "Proceso_4":49, "Proceso_3":49}
+INFO Sending Message reply
+Proceso_2 {"Proceso_2":67, "Proceso_1":65, "Proceso_4":49, "Proceso_3":49}
+INFO Sending Message reply
+Proceso_2 {"Proceso_3":49, "Proceso_2":68, "Proceso_1":65, "Proceso_4":49}
+INFO Sending Message WRITE
+Proceso_2 {"Proceso_2":69, "Proceso_1":65, "Proceso_4":49, "Proceso_3":49}
+INFO Sending Message WRITE
+Proceso_2 {"Proceso_1":65, "Proceso_4":49, "Proceso_3":49, "Proceso_2":70}
+INFO Sending Message WRITE
+Proceso_2 {"Proceso_1":66, "Proceso_4":52, "Proceso_3":61, "Proceso_2":71}
+INFO Receiving Message
+Proceso_2 {"Proceso_3":61, "Proceso_2":72, "Proceso_1":67, "Proceso_4":61}
+INFO Receiving Message
+Proceso_2 {"Proceso_1":67, "Proceso_4":61, "Proceso_3":63, "Proceso_2":73}
+INFO Receiving Message
+Proceso_2 {"Proceso_3":63, "Proceso_2":74, "Proceso_1":67, "Proceso_4":63}
+INFO Receiving Message
+Proceso_2 {"Proceso_2":75, "Proceso_1":75, "Proceso_4":63, "Proceso_3":63}
+INFO Receiving Message
+Proceso_2 {"Proceso_2":76, "Proceso_1":78, "Proceso_4":63, "Proceso_3":63}
+INFO Receiving Message
+Proceso_2 {"Proceso_1":78, "Proceso_4":63, "Proceso_3":63, "Proceso_2":77}
+INFO Sending Message toall
+Proceso_2 {"Proceso_2":78, "Proceso_1":78, "Proceso_4":63, "Proceso_3":63}
+INFO Sending Message toall
+Proceso_2 {"Proceso_4":63, "Proceso_3":63, "Proceso_2":79, "Proceso_1":78}
+INFO Sending Message toall
+Proceso_2 {"Proceso_2":80, "Proceso_1":78, "Proceso_4":63, "Proceso_3":63}
+INFO Sending Message reply
+Proceso_2 {"Proceso_2":81, "Proceso_1":78, "Proceso_4":63, "Proceso_3":63}
+INFO Sending Message reply
+Proceso_3 {"Proceso_3":1}
+Initialization Complete
+Proceso_3 {"Proceso_3":2}
+INFO Sending Message READ
+Proceso_3 {"Proceso_3":3, "Proceso_1":3}
+INFO Receiving Message
+Proceso_3 {"Proceso_3":4, "Proceso_1":3}
+INFO Sending Message reply
+Proceso_3 {"Proceso_1":3, "Proceso_3":5}
+INFO Sending Message READ
+Proceso_3 {"Proceso_3":6, "Proceso_1":3, "Proceso_2":5}
+INFO Receiving Message
+Proceso_3 {"Proceso_3":7, "Proceso_1":3, "Proceso_2":5}
+INFO Sending Message reply
+Proceso_3 {"Proceso_3":8, "Proceso_1":3, "Proceso_2":5}
+INFO Sending Message READ
+Proceso_3 {"Proceso_2":6, "Proceso_4":8, "Proceso_3":9, "Proceso_1":4}
+INFO Receiving Message
+Proceso_3 {"Proceso_3":10, "Proceso_1":4, "Proceso_2":6, "Proceso_4":8}
+INFO Sending Message reply
+Proceso_3 {"Proceso_1":4, "Proceso_2":6, "Proceso_4":10, "Proceso_3":11}
+INFO Receiving Message
+Proceso_3 {"Proceso_1":12, "Proceso_2":6, "Proceso_4":10, "Proceso_3":12}
+INFO Receiving Message
+Proceso_3 {"Proceso_2":6, "Proceso_4":10, "Proceso_3":13, "Proceso_1":15}
+INFO Receiving Message
+Proceso_3 {"Proceso_1":18, "Proceso_2":6, "Proceso_4":10, "Proceso_3":14}
+INFO Receiving Message
+Proceso_3 {"Proceso_2":15, "Proceso_4":10, "Proceso_3":15, "Proceso_1":18}
+INFO Receiving Message
+Proceso_3 {"Proceso_1":18, "Proceso_2":18, "Proceso_4":10, "Proceso_3":16}
+INFO Receiving Message
+Proceso_3 {"Proceso_2":21, "Proceso_4":10, "Proceso_3":17, "Proceso_1":18}
+INFO Receiving Message
+Proceso_3 {"Proceso_3":18, "Proceso_1":18, "Proceso_2":21, "Proceso_4":10}
+INFO Sending Message reply
+Proceso_3 {"Proceso_3":19, "Proceso_1":18, "Proceso_2":21, "Proceso_4":10}
+INFO Sending Message reply
+Proceso_3 {"Proceso_2":21, "Proceso_4":10, "Proceso_3":20, "Proceso_1":18}
+INFO Sending Message READ
+Proceso_3 {"Proceso_3":21, "Proceso_1":18, "Proceso_2":21, "Proceso_4":10}
+INFO Sending Message READ
+Proceso_3 {"Proceso_4":10, "Proceso_3":22, "Proceso_1":18, "Proceso_2":21}
+INFO Sending Message READ
+Proceso_3 {"Proceso_3":23, "Proceso_1":19, "Proceso_2":22, "Proceso_4":22}
+INFO Receiving Message
+Proceso_3 {"Proceso_3":24, "Proceso_1":19, "Proceso_2":22, "Proceso_4":22}
+INFO Sending Message reply
+Proceso_3 {"Proceso_3":25, "Proceso_1":19, "Proceso_2":22, "Proceso_4":24}
+INFO Receiving Message
+Proceso_3 {"Proceso_1":28, "Proceso_2":22, "Proceso_4":24, "Proceso_3":26}
+INFO Receiving Message
+Proceso_3 {"Proceso_3":27, "Proceso_1":31, "Proceso_2":22, "Proceso_4":24}
+INFO Receiving Message
+Proceso_3 {"Proceso_3":28, "Proceso_1":34, "Proceso_2":22, "Proceso_4":24}
+INFO Receiving Message
+Proceso_3 {"Proceso_4":24, "Proceso_3":29, "Proceso_1":34, "Proceso_2":31}
+INFO Receiving Message
+Proceso_3 {"Proceso_3":30, "Proceso_1":34, "Proceso_2":34, "Proceso_4":24}
+INFO Receiving Message
+Proceso_3 {"Proceso_3":31, "Proceso_1":34, "Proceso_2":37, "Proceso_4":24}
+INFO Receiving Message
+Proceso_3 {"Proceso_3":32, "Proceso_1":34, "Proceso_2":37, "Proceso_4":24}
+INFO Sending Message reply
+Proceso_3 {"Proceso_3":33, "Proceso_1":34, "Proceso_2":37, "Proceso_4":24}
+INFO Sending Message reply
+Proceso_3 {"Proceso_3":34, "Proceso_1":34, "Proceso_2":37, "Proceso_4":24}
+INFO Sending Message READ
+Proceso_3 {"Proceso_1":34, "Proceso_2":37, "Proceso_4":24, "Proceso_3":35}
+INFO Sending Message READ
+Proceso_3 {"Proceso_4":24, "Proceso_3":36, "Proceso_1":34, "Proceso_2":37}
+INFO Sending Message READ
+Proceso_3 {"Proceso_4":36, "Proceso_3":37, "Proceso_1":35, "Proceso_2":38}
+INFO Receiving Message
+Proceso_3 {"Proceso_3":38, "Proceso_1":35, "Proceso_2":38, "Proceso_4":36}
+INFO Sending Message reply
+Proceso_3 {"Proceso_3":39, "Proceso_1":35, "Proceso_2":38, "Proceso_4":38}
+INFO Receiving Message
+Proceso_3 {"Proceso_3":40, "Proceso_1":44, "Proceso_2":38, "Proceso_4":38}
+INFO Receiving Message
+Proceso_3 {"Proceso_3":41, "Proceso_1":47, "Proceso_2":38, "Proceso_4":38}
+INFO Receiving Message
+Proceso_3 {"Proceso_3":42, "Proceso_1":50, "Proceso_2":38, "Proceso_4":38}
+INFO Receiving Message
+Proceso_3 {"Proceso_1":50, "Proceso_2":47, "Proceso_4":38, "Proceso_3":43}
+INFO Receiving Message
+Proceso_3 {"Proceso_2":50, "Proceso_4":38, "Proceso_3":44, "Proceso_1":50}
+INFO Receiving Message
+Proceso_3 {"Proceso_3":45, "Proceso_1":50, "Proceso_2":53, "Proceso_4":38}
+INFO Receiving Message
+Proceso_3 {"Proceso_3":46, "Proceso_1":50, "Proceso_2":53, "Proceso_4":38}
+INFO Sending Message reply
+Proceso_3 {"Proceso_1":50, "Proceso_2":53, "Proceso_4":38, "Proceso_3":47}
+INFO Sending Message reply
+Proceso_3 {"Proceso_3":48, "Proceso_1":50, "Proceso_2":53, "Proceso_4":38}
+INFO Sending Message READ
+Proceso_3 {"Proceso_4":38, "Proceso_3":49, "Proceso_1":50, "Proceso_2":53}
+INFO Sending Message READ
+Proceso_3 {"Proceso_3":50, "Proceso_1":50, "Proceso_2":53, "Proceso_4":38}
+INFO Sending Message READ
+Proceso_3 {"Proceso_3":51, "Proceso_1":51, "Proceso_2":54, "Proceso_4":50}
+INFO Receiving Message
+Proceso_3 {"Proceso_1":51, "Proceso_2":54, "Proceso_4":50, "Proceso_3":52}
+INFO Sending Message reply
+Proceso_3 {"Proceso_4":52, "Proceso_3":53, "Proceso_1":51, "Proceso_2":54}
+INFO Receiving Message
+Proceso_3 {"Proceso_3":54, "Proceso_1":60, "Proceso_2":54, "Proceso_4":52}
+INFO Receiving Message
+Proceso_3 {"Proceso_3":55, "Proceso_1":63, "Proceso_2":54, "Proceso_4":52}
+INFO Receiving Message
+Proceso_3 {"Proceso_3":56, "Proceso_1":66, "Proceso_2":54, "Proceso_4":52}
+INFO Receiving Message
+Proceso_3 {"Proceso_3":57, "Proceso_1":66, "Proceso_2":63, "Proceso_4":52}
+INFO Receiving Message
+Proceso_3 {"Proceso_3":58, "Proceso_1":66, "Proceso_2":66, "Proceso_4":52}
+INFO Receiving Message
+Proceso_3 {"Proceso_2":69, "Proceso_4":52, "Proceso_3":59, "Proceso_1":66}
+INFO Receiving Message
+Proceso_3 {"Proceso_3":60, "Proceso_1":66, "Proceso_2":69, "Proceso_4":52}
+INFO Sending Message reply
+Proceso_3 {"Proceso_3":61, "Proceso_1":66, "Proceso_2":69, "Proceso_4":52}
+INFO Sending Message reply
+Proceso_3 {"Proceso_1":66, "Proceso_2":69, "Proceso_4":52, "Proceso_3":62}
+INFO Sending Message READ
+Proceso_3 {"Proceso_3":63, "Proceso_1":66, "Proceso_2":69, "Proceso_4":52}
+INFO Sending Message READ
+Proceso_3 {"Proceso_1":66, "Proceso_2":69, "Proceso_4":52, "Proceso_3":64}
+INFO Sending Message READ
+Proceso_3 {"Proceso_3":65, "Proceso_1":67, "Proceso_2":70, "Proceso_4":64}
+INFO Receiving Message
+Proceso_3 {"Proceso_3":66, "Proceso_1":67, "Proceso_2":70, "Proceso_4":64}
+INFO Sending Message reply
+Proceso_3 {"Proceso_3":67, "Proceso_1":67, "Proceso_2":70, "Proceso_4":66}
+INFO Receiving Message
+Proceso_3 {"Proceso_3":68, "Proceso_1":76, "Proceso_2":70, "Proceso_4":66}
+INFO Receiving Message
+Proceso_3 {"Proceso_3":69, "Proceso_1":79, "Proceso_2":70, "Proceso_4":66}
+INFO Receiving Message
+Proceso_3 {"Proceso_3":70, "Proceso_1":79, "Proceso_2":78, "Proceso_4":66}
+INFO Receiving Message
+Proceso_3 {"Proceso_3":71, "Proceso_1":79, "Proceso_2":80, "Proceso_4":66}
+INFO Receiving Message
+Proceso_4 {"Proceso_4":1}
+Initialization Complete
+Proceso_4 {"Proceso_4":2, "Proceso_1":4}
+INFO Receiving Message
+Proceso_4 {"Proceso_4":3, "Proceso_1":4}
+INFO Sending Message reply
+Proceso_4 {"Proceso_4":4, "Proceso_1":4}
+INFO Sending Message READ
+Proceso_4 {"Proceso_4":5, "Proceso_1":4}
+INFO Sending Message READ
+Proceso_4 {"Proceso_4":6, "Proceso_1":4, "Proceso_2":6}
+INFO Receiving Message
+Proceso_4 {"Proceso_4":7, "Proceso_1":4, "Proceso_2":6}
+INFO Sending Message reply
+Proceso_4 {"Proceso_4":8, "Proceso_1":4, "Proceso_2":6}
+INFO Sending Message READ
+Proceso_4 {"Proceso_4":9, "Proceso_1":4, "Proceso_2":6, "Proceso_3":8}
+INFO Receiving Message
+Proceso_4 {"Proceso_1":4, "Proceso_2":6, "Proceso_3":8, "Proceso_4":10}
+INFO Sending Message reply
+Proceso_4 {"Proceso_3":10, "Proceso_4":11, "Proceso_1":4, "Proceso_2":6}
+INFO Receiving Message
+Proceso_4 {"Proceso_4":12, "Proceso_1":13, "Proceso_2":6, "Proceso_3":10}
+INFO Receiving Message
+Proceso_4 {"Proceso_4":13, "Proceso_1":16, "Proceso_2":6, "Proceso_3":10}
+INFO Receiving Message
+Proceso_4 {"Proceso_4":14, "Proceso_1":19, "Proceso_2":6, "Proceso_3":10}
+INFO Receiving Message
+Proceso_4 {"Proceso_4":15, "Proceso_1":19, "Proceso_2":16, "Proceso_3":10}
+INFO Receiving Message
+Proceso_4 {"Proceso_4":16, "Proceso_1":19, "Proceso_2":19, "Proceso_3":10}
+INFO Receiving Message
+Proceso_4 {"Proceso_2":22, "Proceso_3":10, "Proceso_4":17, "Proceso_1":19}
+INFO Receiving Message
+Proceso_4 {"Proceso_4":18, "Proceso_1":19, "Proceso_2":22, "Proceso_3":10}
+INFO Sending Message reply
+Proceso_4 {"Proceso_4":19, "Proceso_1":19, "Proceso_2":22, "Proceso_3":10}
+INFO Sending Message reply
+Proceso_4 {"Proceso_4":20, "Proceso_1":19, "Proceso_2":22, "Proceso_3":10}
+INFO Sending Message READ
+Proceso_4 {"Proceso_4":21, "Proceso_1":19, "Proceso_2":22, "Proceso_3":10}
+INFO Sending Message READ
+Proceso_4 {"Proceso_1":19, "Proceso_2":22, "Proceso_3":10, "Proceso_4":22}
+INFO Sending Message READ
+Proceso_4 {"Proceso_4":23, "Proceso_1":19, "Proceso_2":22, "Proceso_3":22}
+INFO Receiving Message
+Proceso_4 {"Proceso_3":22, "Proceso_4":24, "Proceso_1":19, "Proceso_2":22}
+INFO Sending Message reply
+Proceso_4 {"Proceso_4":25, "Proceso_1":19, "Proceso_2":22, "Proceso_3":24}
+INFO Receiving Message
+Proceso_4 {"Proceso_2":22, "Proceso_3":24, "Proceso_4":26, "Proceso_1":29}
+INFO Receiving Message
+Proceso_4 {"Proceso_1":32, "Proceso_2":22, "Proceso_3":24, "Proceso_4":27}
+INFO Receiving Message
+Proceso_4 {"Proceso_4":28, "Proceso_1":35, "Proceso_2":22, "Proceso_3":24}
+INFO Receiving Message
+Proceso_4 {"Proceso_2":32, "Proceso_3":24, "Proceso_4":29, "Proceso_1":35}
+INFO Receiving Message
+Proceso_4 {"Proceso_3":24, "Proceso_4":30, "Proceso_1":35, "Proceso_2":35}
+INFO Receiving Message
+Proceso_4 {"Proceso_1":35, "Proceso_2":38, "Proceso_3":24, "Proceso_4":31}
+INFO Receiving Message
+Proceso_4 {"Proceso_4":32, "Proceso_1":35, "Proceso_2":38, "Proceso_3":24}
+INFO Sending Message reply
+Proceso_4 {"Proceso_4":33, "Proceso_1":35, "Proceso_2":38, "Proceso_3":24}
+INFO Sending Message reply
+Proceso_4 {"Proceso_4":34, "Proceso_1":35, "Proceso_2":38, "Proceso_3":24}
+INFO Sending Message READ
+Proceso_4 {"Proceso_2":38, "Proceso_3":24, "Proceso_4":35, "Proceso_1":35}
+INFO Sending Message READ
+Proceso_4 {"Proceso_4":36, "Proceso_1":35, "Proceso_2":38, "Proceso_3":24}
+INFO Sending Message READ
+Proceso_4 {"Proceso_4":37, "Proceso_1":35, "Proceso_2":38, "Proceso_3":36}
+INFO Receiving Message
+Proceso_4 {"Proceso_3":36, "Proceso_4":38, "Proceso_1":35, "Proceso_2":38}
+INFO Sending Message reply
+Proceso_4 {"Proceso_4":39, "Proceso_1":35, "Proceso_2":38, "Proceso_3":38}
+INFO Receiving Message
+Proceso_4 {"Proceso_3":38, "Proceso_4":40, "Proceso_1":45, "Proceso_2":38}
+INFO Receiving Message
+Proceso_4 {"Proceso_4":41, "Proceso_1":48, "Proceso_2":38, "Proceso_3":38}
+INFO Receiving Message
+Proceso_4 {"Proceso_2":38, "Proceso_3":38, "Proceso_4":42, "Proceso_1":51}
+INFO Receiving Message
+Proceso_4 {"Proceso_1":51, "Proceso_2":48, "Proceso_3":38, "Proceso_4":43}
+INFO Receiving Message
+Proceso_4 {"Proceso_4":44, "Proceso_1":51, "Proceso_2":51, "Proceso_3":38}
+INFO Receiving Message
+Proceso_4 {"Proceso_2":54, "Proceso_3":38, "Proceso_4":45, "Proceso_1":51}
+INFO Receiving Message
+Proceso_4 {"Proceso_3":38, "Proceso_4":46, "Proceso_1":51, "Proceso_2":54}
+INFO Sending Message reply
+Proceso_4 {"Proceso_4":47, "Proceso_1":51, "Proceso_2":54, "Proceso_3":38}
+INFO Sending Message reply
+Proceso_4 {"Proceso_4":48, "Proceso_1":51, "Proceso_2":54, "Proceso_3":38}
+INFO Sending Message READ
+Proceso_4 {"Proceso_3":38, "Proceso_4":49, "Proceso_1":51, "Proceso_2":54}
+INFO Sending Message READ
+Proceso_4 {"Proceso_4":50, "Proceso_1":51, "Proceso_2":54, "Proceso_3":38}
+INFO Sending Message READ
+Proceso_4 {"Proceso_3":50, "Proceso_4":51, "Proceso_1":51, "Proceso_2":54}
+INFO Receiving Message
+Proceso_4 {"Proceso_1":51, "Proceso_2":54, "Proceso_3":50, "Proceso_4":52}
+INFO Sending Message reply
+Proceso_4 {"Proceso_4":53, "Proceso_1":51, "Proceso_2":54, "Proceso_3":52}
+INFO Receiving Message
+Proceso_4 {"Proceso_4":54, "Proceso_1":61, "Proceso_2":54, "Proceso_3":52}
+INFO Receiving Message
+Proceso_4 {"Proceso_3":52, "Proceso_4":55, "Proceso_1":64, "Proceso_2":54}
+INFO Receiving Message
+Proceso_4 {"Proceso_4":56, "Proceso_1":67, "Proceso_2":54, "Proceso_3":52}
+INFO Receiving Message
+Proceso_4 {"Proceso_4":57, "Proceso_1":67, "Proceso_2":64, "Proceso_3":52}
+INFO Receiving Message
+Proceso_4 {"Proceso_4":58, "Proceso_1":67, "Proceso_2":67, "Proceso_3":52}
+INFO Receiving Message
+Proceso_4 {"Proceso_3":52, "Proceso_4":59, "Proceso_1":67, "Proceso_2":70}
+INFO Receiving Message
+Proceso_4 {"Proceso_4":60, "Proceso_1":67, "Proceso_2":70, "Proceso_3":52}
+INFO Sending Message reply
+Proceso_4 {"Proceso_3":52, "Proceso_4":61, "Proceso_1":67, "Proceso_2":70}
+INFO Sending Message reply
+Proceso_4 {"Proceso_3":52, "Proceso_4":62, "Proceso_1":67, "Proceso_2":70}
+INFO Sending Message READ
+Proceso_4 {"Proceso_3":52, "Proceso_4":63, "Proceso_1":67, "Proceso_2":70}
+INFO Sending Message READ
+Proceso_4 {"Proceso_4":64, "Proceso_1":67, "Proceso_2":70, "Proceso_3":52}
+INFO Sending Message READ
+Proceso_4 {"Proceso_4":65, "Proceso_1":67, "Proceso_2":70, "Proceso_3":64}
+INFO Receiving Message
+Proceso_4 {"Proceso_4":66, "Proceso_1":67, "Proceso_2":70, "Proceso_3":64}
+INFO Sending Message reply
+Proceso_4 {"Proceso_4":67, "Proceso_1":67, "Proceso_2":70, "Proceso_3":66}
+INFO Receiving Message
+Proceso_4 {"Proceso_3":66, "Proceso_4":68, "Proceso_1":77, "Proceso_2":70}
+INFO Receiving Message
+Proceso_4 {"Proceso_4":69, "Proceso_1":80, "Proceso_2":70, "Proceso_3":66}
+INFO Receiving Message
+Proceso_4 {"Proceso_4":70, "Proceso_1":80, "Proceso_2":79, "Proceso_3":66}
+INFO Receiving Message
+Proceso_4 {"Proceso_4":71, "Proceso_1":80, "Proceso_2":81, "Proceso_3":66}
+INFO Receiving Message
