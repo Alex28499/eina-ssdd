@@ -55,8 +55,13 @@ const Leader = 2
 // comprometidas, envía un AplicaOperacion, con cada una de ellas, al canal
 // "canalAplicar" (funcion NuevoNodo) de la maquina de estados
 type AplicaOperacion struct {
-	Indice    int // en la entrada de registro
-	Operacion interface{}
+	Indice int // en la entrada de registro
+	Op     Operacion
+}
+
+type Operacion struct {
+	Clave int
+	Valor string
 }
 
 // Tipo de dato Go que representa un solo nodo (réplica) de raft
@@ -125,7 +130,13 @@ func NuevoNodo(nodos []string, yo int, canalAplicar chan AplicaOperacion) *NodoR
 	nr.votedFor = -1
 	nr.comitIndex = 0
 	nr.lastApplied = 0
-	nr.log = []AplicaOperacion{{0, nil}}
+	operacion := Operacion{Clave: 0, Valor: "start"}
+	nr.log = []AplicaOperacion{
+		{
+			Indice: 0,
+			Op:     operacion,
+		},
+	}
 	nr.iniciarLogger(nodos[yo])
 	go nr.gestionarSeguidor()
 	return nr
@@ -247,18 +258,26 @@ func (nr *NodoRaft) ObtenerEstado(_, reply *ReplyEstado) error { //Finished
 // la operacion si consigue comprometerse.
 // El segundo valor es el mandato en curso
 // El tercer valor es true si el nodo cree ser el lider
-func (nr *NodoRaft) SometerOperacion(operacion interface{}) (int, int, bool) {
+type SometerOperacionResponse struct {
+	Indice  int
+	Mandato int
+	EsLider bool
+}
+
+func (nr *NodoRaft) SometerOperacion(operacion Operacion, reply *SometerOperacionResponse) error {
+	nr.logger.Println("sometiendo op")
 	nr.mux.Lock()
-	indice := nr.comitIndex + 1
-	mandato := nr.currentTerm
-	EsLider := (nr.estado == Leader)
-	nr.mux.Unlock()
-	if EsLider {
-		nr.mux.Lock()
+	reply.Indice = nr.comitIndex + 1
+	reply.Mandato = nr.currentTerm
+	reply.EsLider = false
+	if nr.estado == Leader {
+		nr.logger.Println("Soy leader")
 		nr.log = append(nr.log, AplicaOperacion{nr.currentTerm, operacion})
-		nr.mux.Unlock()
+		nr.logger.Println("Operacion sometida")
+		reply.EsLider = true
 	}
-	return indice, mandato, EsLider
+	nr.mux.Unlock()
+	return nil
 }
 
 func min(a, b int) int {

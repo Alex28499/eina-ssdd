@@ -20,9 +20,9 @@ const (
 	MAQUINA3      = "127.0.0.1"
 
 	//puertos
-	PUERTOREPLICA1 = "30000"
-	PUERTOREPLICA2 = "30001"
-	PUERTOREPLICA3 = "30002"
+	PUERTOREPLICA1 = "30013"
+	PUERTOREPLICA2 = "30014"
+	PUERTOREPLICA3 = "30015"
 
 	//nodos replicas
 	REPLICA1 = MAQUINA1 + ":" + PUERTOREPLICA1
@@ -66,7 +66,8 @@ func TestPrimerasPruebas(t *testing.T) { // (m *testing.M) {
 		func(t *testing.T) { cr.FalloAnteriorElegirNuevoLiderTest3(t) })
 
 	// Test4: Primer nodo copia
-
+	t.Run("T4:TresOperacionesComprometidasEstableTest4 ",
+		func(t *testing.T) { cr.tresOperacionesComprometidasEstableTest4(t) })
 	// tear down code
 	// eliminar procesos en máquinas remotas
 	cr.stop()
@@ -116,7 +117,6 @@ func (cr *CanalResultados) stopDistributedProcesses(replicas []string) {
 		cliente, err := rpc.Dial("tcp", replica)
 		check.CheckError(err, "error tcp")
 		if cliente != nil {
-
 			err = rpctimeout.CallTimeout(cliente, "NodoRaft.Para", struct{}{}, &struct{}{}, 25*time.Millisecond)
 			check.CheckError(err, "Error al parar")
 		}
@@ -129,7 +129,7 @@ func (cr *CanalResultados) stopDistributedProcesses(replicas []string) {
 
 // Se pone en marcha una replica ??
 func (cr *CanalResultados) soloArranqueYparadaTest1(t *testing.T) {
-	//t.Skip("SKIPPED soloArranqueYparadaTest1")
+	t.Skip("SKIPPED soloArranqueYparadaTest1")
 
 	fmt.Println(t.Name(), ".....................")
 
@@ -146,7 +146,7 @@ func (cr *CanalResultados) soloArranqueYparadaTest1(t *testing.T) {
 
 // Primer lider en marcha
 func (cr *CanalResultados) ElegirPrimerLiderTest2(t *testing.T) {
-	//t.Skip("SKIPPED ElegirPrimerLiderTest2")
+	t.Skip("SKIPPED ElegirPrimerLiderTest2")
 
 	fmt.Println(t.Name(), ".....................")
 
@@ -156,7 +156,6 @@ func (cr *CanalResultados) ElegirPrimerLiderTest2(t *testing.T) {
 	cr.startDistributedProcesses(replicasMaquinas)
 
 	fmt.Printf("Probando lider en curso\n")
-	time.Sleep(2 * time.Second)
 	if cr.pruebaUnLider([]string{REPLICA1, REPLICA2, REPLICA3}) == "-1" {
 		t.Errorf("No existe lider")
 	}
@@ -169,7 +168,7 @@ func (cr *CanalResultados) ElegirPrimerLiderTest2(t *testing.T) {
 
 // Fallo de un primer lider y reeleccion de uno nuevo
 func (cr *CanalResultados) FalloAnteriorElegirNuevoLiderTest3(t *testing.T) {
-	//t.Skip("SKIPPED FalloAnteriorElegirNuevoLiderTest3")
+	t.Skip("SKIPPED FalloAnteriorElegirNuevoLiderTest3")
 
 	fmt.Println(t.Name(), ".....................")
 
@@ -199,7 +198,7 @@ func (cr *CanalResultados) FalloAnteriorElegirNuevoLiderTest3(t *testing.T) {
 }
 
 // 3 operaciones comprometidas con situacion estable y sin fallos
-func (cr *CanalResultados) tresOperacionesComprometidasEstable(t *testing.T) {
+func (cr *CanalResultados) tresOperacionesComprometidasEstableTest4(t *testing.T) {
 	//t.Skip("SKIPPED tresOperacionesComprometidasEstable")
 
 	fmt.Println(t.Name(), ".....................")
@@ -207,6 +206,18 @@ func (cr *CanalResultados) tresOperacionesComprometidasEstable(t *testing.T) {
 	replicasMaquinas :=
 		map[string]string{REPLICA1: MAQUINA1, REPLICA2: MAQUINA2, REPLICA3: MAQUINA3}
 	cr.startDistributedProcesses(replicasMaquinas)
+	lider := cr.pruebaUnLider([]string{REPLICA1, REPLICA2, REPLICA3})
+	if lider != "-1" {
+		cliente, err := rpc.Dial("tcp", lider)
+		check.CheckError(err, "error tcp")
+		for i := 0; i < 3; i++ {
+			reply := new(raft.SometerOperacionResponse)
+			err := rpctimeout.CallTimeout(cliente, "NodoRaft.SometerOperacion", raft.Operacion{Clave: i, Valor: "Test"}, &reply, 500*time.Millisecond)
+			check.CheckError(err, "SubmitOperation RPC Call error")
+		}
+	}
+	cr.stopDistributedProcesses([]string{REPLICA1, REPLICA2, REPLICA3})
+
 }
 
 // --------------------------------------------------------------------------
