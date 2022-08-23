@@ -169,11 +169,9 @@ func (nr *NodoRaft) gestionarSeguidor() {
 	nr.logger.Println("gestionarSeguidor()")
 	rand.Seed(time.Now().UnixNano())
 	timeout := time.Duration(rand.Intn(150)+150) * time.Millisecond
-	nr.logger.Println("Timeout ", timeout)
 	for {
 		select {
 		case <-nr.canalLat:
-			nr.logger.Println("Latido")
 		case <-time.After(timeout):
 			go nr.iniciarElecion()
 			return
@@ -206,7 +204,10 @@ func (nr *NodoRaft) gestionLider() {
 //
 func (nr *NodoRaft) Para(_, _ *struct{}) error { //Finished
 	nr.logger.Println("Para()")
-	os.Exit(1)
+	go func() {
+		time.Sleep(100 + time.Millisecond)
+		os.Exit(0)
+	}()
 	return nil
 }
 
@@ -218,13 +219,17 @@ type ReplyEstado struct { //Finished
 }
 
 // Devuelve "yo", mandato en curso y si este nodo cree ser lider
-func (nr *NodoRaft) ObtenerEstado(reply *ReplyEstado) { //Finished
+func (nr *NodoRaft) ObtenerEstado(_, reply *ReplyEstado) error { //Finished
 	nr.logger.Println("ObtenerEstado()")
 	nr.mux.Lock()
 	reply.Yo = nr.yo
 	reply.Term = nr.currentTerm
-	reply.Lider = (nr.estado == Leader)
+	reply.Lider = false
+	if nr.estado == Leader {
+		reply.Lider = true
+	}
 	nr.mux.Unlock()
+	return nil
 }
 
 // El servicio que utilice Raft (base de datos clave/valor, por ejemplo)
@@ -243,7 +248,6 @@ func (nr *NodoRaft) ObtenerEstado(reply *ReplyEstado) { //Finished
 // El segundo valor es el mandato en curso
 // El tercer valor es true si el nodo cree ser el lider
 func (nr *NodoRaft) SometerOperacion(operacion interface{}) (int, int, bool) {
-	nr.logger.Println("SometerOperacion()")
 	nr.mux.Lock()
 	indice := nr.comitIndex + 1
 	mandato := nr.currentTerm
@@ -265,8 +269,8 @@ func min(a, b int) int {
 }
 
 func (nr *NodoRaft) AppendEntry(args *AppendEntriesPeticion, reply *AppendEntriesResponse) error {
-	nr.logger.Println("AppendEntry()")
 	nr.mux.Lock()
+	defer nr.mux.Unlock()
 	if args.Term > nr.currentTerm {
 		nr.currentTerm = args.Term
 	}
@@ -284,13 +288,11 @@ func (nr *NodoRaft) AppendEntry(args *AppendEntriesPeticion, reply *AppendEntrie
 }
 
 func (nr *NodoRaft) callAppendEntry(nodo int, request *AppendEntriesPeticion) {
-	nr.logger.Println("callAppendEntry()")
 	var respuesta AppendEntriesResponse
 	cliente, err := rpc.Dial("tcp", nr.nodos[nodo])
 	checkError(err)
 	if cliente != nil {
 		err = rpctimeout.CallTimeout(cliente, "NodoRaft.AppendEntry", &request, &respuesta, 25*time.Millisecond)
-		nr.logger.Println("respuesta ", err)
 		if err == nil {
 			nr.appendChan <- *&respuesta
 		}
@@ -300,31 +302,28 @@ func (nr *NodoRaft) callAppendEntry(nodo int, request *AppendEntriesPeticion) {
 }
 
 func (nr *NodoRaft) AppendEntries() {
-	nr.logger.Println("AppendEntries()")
-
 	newNextIdx := len(nr.log)
 	newMatchIdx := len(nr.log) - 1
 	for i := 0; i < len(nr.nodos); i++ {
-		nr.logger.Println("AppendEntrie for ", i)
-		nr.mux.Lock()
-		req := AppendEntriesPeticion{
-			Term:         nr.currentTerm,
-			LeaderId:     nr.yo,
-			PrevLogIndex: nr.nextIndex[i],
-			Entries:      nr.log[nr.nextIndex[i]:],
-			LeaderCommit: nr.comitIndex,
+		if i != nr.yo {
+			nr.mux.Lock()
+			req := AppendEntriesPeticion{
+				Term:         nr.currentTerm,
+				LeaderId:     nr.yo,
+				PrevLogIndex: nr.nextIndex[i],
+				Entries:      nr.log[nr.nextIndex[i]:],
+				LeaderCommit: nr.comitIndex,
+			}
+			nr.mux.Unlock()
+			go nr.callAppendEntry(i, &req)
 		}
-		nr.mux.Unlock()
-		go nr.callAppendEntry(i, &req)
 
 	}
 	for i := len(nr.nodos); i >= 0; i-- {
 		select {
 		case reply := <-nr.appendChan:
 			nr.mux.Lock()
-			nr.logger.Println("responde latido")
 			if reply.Success {
-				nr.logger.Println("responde Success")
 				nr.nextIndex[reply.SeguidorId] = newNextIdx
 				nr.matchIndex[reply.SeguidorId] = newMatchIdx
 
@@ -339,7 +338,6 @@ func (nr *NodoRaft) AppendEntries() {
 			}
 			nr.mux.Unlock()
 		case <-time.After(50 * time.Millisecond):
-			nr.logger.Println("latido timeout")
 		}
 	}
 }
@@ -416,10 +414,8 @@ func (nr *NodoRaft) iniciarElecion() {
 	minTimeout := 300
 	maxTimeout := 600
 	for {
-		nr.logger.Println("Espero respuesta")
 		select {
 		case reply := <-nr.replyVChan:
-			nr.logger.Println("Respuesta")
 			if reply.Term > nr.currentTerm {
 				nr.logger.Panicln(reply.Term, ">", nr.currentTerm)
 				nr.mux.Lock()
@@ -430,27 +426,23 @@ func (nr *NodoRaft) iniciarElecion() {
 				break
 			}
 			if reply.VoteGranded {
-				nr.logger.Println("Voto garantizado")
 				votosConfimados++
 				if votosConfimados >= len(nr.nodos)/2 {
 					nr.mux.Lock()
 					nr.logger.Println("Soy leader ---------------------------->")
 					nr.estado = Leader
+					nr.logger.Println(nr.estado)
 					for i := 0; i < len(nr.nodos); i++ {
-						nr.logger.Println("Actualizacion ", nr.nextIndex[0])
 						nr.nextIndex[i] = len(nr.log)
-						nr.logger.Println("nextIndex ", i)
 						nr.matchIndex[i] = -1
 					}
 					nr.mux.Unlock()
-					nr.logger.Println("Pre goroutine")
 					nr.gestionLider()
 				}
 
 			}
 			break
 		case <-time.After(time.Duration(rand.Intn(maxTimeout-minTimeout)+minTimeout) * time.Millisecond):
-			nr.logger.Printf("Salto timeout\n")
 			break
 		}
 	}
@@ -466,8 +458,6 @@ func (nr *NodoRaft) iniciarElecion() {
 func (nr *NodoRaft) PedirVoto(args *ArgsPeticionVoto, reply *RespuestaPeticionVoto) error {
 	nr.mux.Lock()
 	defer nr.mux.Unlock()
-	nr.logger.Printf("PedirVoto()")
-	nr.logger.Printf("%v mirando voto %v\n", nr.yo, args.CadidateId)
 	if args.Term >= nr.currentTerm && (nr.votedFor == -1 || nr.votedFor == args.CadidateId) && args.LastLogIndex >= nr.lastApplied {
 		nr.votedFor = args.CadidateId
 		nr.currentTerm = args.Term
@@ -514,14 +504,10 @@ func (nr *NodoRaft) PedirVoto(args *ArgsPeticionVoto, reply *RespuestaPeticionVo
 func (nr *NodoRaft) enviarPeticionVoto(nodo int, args *ArgsPeticionVoto,
 	reply *RespuestaPeticionVoto) {
 
-	nr.logger.Println("enviarPeticionVoto()")
 	node, _ := rpc.Dial("tcp", nr.nodos[nodo])
 	if node != nil {
-		nr.logger.Println("Enviando peticion ", nr.nodos[nodo], args)
 		ok := rpctimeout.CallTimeout(node, "NodoRaft.PedirVoto", &args, &reply, 150*time.Millisecond)
-		nr.logger.Println("Me ha respondido", ok)
 		if ok == nil {
-			nr.logger.Println("No hay error", reply)
 			nr.replyVChan <- *reply
 		}
 		node.Close()

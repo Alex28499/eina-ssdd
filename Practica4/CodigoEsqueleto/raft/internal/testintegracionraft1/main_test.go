@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/rpc"
 	"raft/internal/comun/check"
+	"raft/internal/comun/rpctimeout"
 	"raft/internal/despliegue"
 	"raft/internal/raft"
 	"strconv"
@@ -19,9 +20,9 @@ const (
 	MAQUINA3      = "127.0.0.1"
 
 	//puertos
-	PUERTOREPLICA1 = "35096"
-	PUERTOREPLICA2 = "35097"
-	PUERTOREPLICA3 = "35000"
+	PUERTOREPLICA1 = "30000"
+	PUERTOREPLICA2 = "30001"
+	PUERTOREPLICA3 = "30002"
 
 	//nodos replicas
 	REPLICA1 = MAQUINA1 + ":" + PUERTOREPLICA1
@@ -89,6 +90,7 @@ func (cr CanalResultados) stop() {
 // y lista clientes (host:puerto)
 func (cr *CanalResultados) startDistributedProcesses(
 	replicasMaquinas map[string]string) {
+	fmt.Println("Starting ")
 	listaReplicas := ""
 	for replica := range replicasMaquinas {
 		listaReplicas = listaReplicas + " " + replica
@@ -102,22 +104,20 @@ func (cr *CanalResultados) startDistributedProcesses(
 
 		// dar tiempo para se establezcan las replicas
 	}
-	time.Sleep(20 * time.Second)
+	time.Sleep(5 * time.Second)
 
 }
 
 //
 func (cr *CanalResultados) stopDistributedProcesses(replicas []string) {
-
+	fmt.Println("Stopping")
 	for _, replica := range replicas {
 		fmt.Println("Replica a parar: " + replica)
 		cliente, err := rpc.Dial("tcp", replica)
-		fmt.Println(err)
 		check.CheckError(err, "error tcp")
-		fmt.Println("cliente nil")
 		if cliente != nil {
-			err = cliente.Call("NodoRaft.Para", struct{}{}, &struct{}{})
-			fmt.Println(err)
+
+			err = rpctimeout.CallTimeout(cliente, "NodoRaft.Para", struct{}{}, &struct{}{}, 25*time.Millisecond)
 			check.CheckError(err, "Error al parar")
 		}
 	}
@@ -129,7 +129,7 @@ func (cr *CanalResultados) stopDistributedProcesses(replicas []string) {
 
 // Se pone en marcha una replica ??
 func (cr *CanalResultados) soloArranqueYparadaTest1(t *testing.T) {
-	t.Skip("SKIPPED soloArranqueYparadaTest1")
+	//t.Skip("SKIPPED soloArranqueYparadaTest1")
 
 	fmt.Println(t.Name(), ".....................")
 
@@ -152,26 +152,24 @@ func (cr *CanalResultados) ElegirPrimerLiderTest2(t *testing.T) {
 
 	// Poner en marcha  3 réplicas Raft
 	replicasMaquinas :=
-		//map[string]string{REPLICA1: MAQUINA1, REPLICA2: MAQUINA2, REPLICA3: MAQUINA3}
-		map[string]string{REPLICA1: MAQUINA1, REPLICA2: MAQUINA2}
+		map[string]string{REPLICA1: MAQUINA1, REPLICA2: MAQUINA2, REPLICA3: MAQUINA3}
 	cr.startDistributedProcesses(replicasMaquinas)
 
 	fmt.Printf("Probando lider en curso\n")
-	time.Sleep(15 * time.Second)
-	//if cr.pruebaUnLider([]string{REPLICA1, REPLICA2, REPLICA3}) == "-1" {
-	if cr.pruebaUnLider([]string{REPLICA1, REPLICA2}) == "-1" {
+	time.Sleep(2 * time.Second)
+	if cr.pruebaUnLider([]string{REPLICA1, REPLICA2, REPLICA3}) == "-1" {
 		t.Errorf("No existe lider")
 	}
 
 	// Parar réplicas alamcenamiento en remoto
-	cr.stopDistributedProcesses([]string{REPLICA1, REPLICA2})
+	cr.stopDistributedProcesses([]string{REPLICA1, REPLICA2, REPLICA3})
 
 	fmt.Println(".............", t.Name(), "Superado")
 }
 
 // Fallo de un primer lider y reeleccion de uno nuevo
 func (cr *CanalResultados) FalloAnteriorElegirNuevoLiderTest3(t *testing.T) {
-	t.Skip("SKIPPED FalloAnteriorElegirNuevoLiderTest3")
+	//t.Skip("SKIPPED FalloAnteriorElegirNuevoLiderTest3")
 
 	fmt.Println(t.Name(), ".....................")
 
@@ -180,14 +178,15 @@ func (cr *CanalResultados) FalloAnteriorElegirNuevoLiderTest3(t *testing.T) {
 		map[string]string{REPLICA1: MAQUINA1, REPLICA2: MAQUINA2, REPLICA3: MAQUINA3}
 	cr.startDistributedProcesses(replicasMaquinas)
 
-	fmt.Printf("Lider inicial\n")
 	lider := cr.pruebaUnLider([]string{REPLICA1, REPLICA2, REPLICA3})
 
 	if lider != "-1" {
 		cr.stopDistributedProcesses([]string{lider})
 	}
-	fmt.Printf("Comprobar nuevo lider\n")
+	time.Sleep(2 * time.Second)
 	newArray := cr.eliminarLider(lider, []string{REPLICA1, REPLICA2, REPLICA3})
+	fmt.Println("Comprobar nuevo lider", newArray)
+
 	lider1 := cr.pruebaUnLider(newArray)
 
 	if lider1 != "-1" {
@@ -201,8 +200,13 @@ func (cr *CanalResultados) FalloAnteriorElegirNuevoLiderTest3(t *testing.T) {
 
 // 3 operaciones comprometidas con situacion estable y sin fallos
 func (cr *CanalResultados) tresOperacionesComprometidasEstable(t *testing.T) {
-	t.Skip("SKIPPED tresOperacionesComprometidasEstable")
+	//t.Skip("SKIPPED tresOperacionesComprometidasEstable")
 
+	fmt.Println(t.Name(), ".....................")
+
+	replicasMaquinas :=
+		map[string]string{REPLICA1: MAQUINA1, REPLICA2: MAQUINA2, REPLICA3: MAQUINA3}
+	cr.startDistributedProcesses(replicasMaquinas)
 }
 
 // --------------------------------------------------------------------------
@@ -210,25 +214,22 @@ func (cr *CanalResultados) tresOperacionesComprometidasEstable(t *testing.T) {
 // Comprobar que hay un solo lider
 // probar varias veces si se necesitan reelecciones
 func (cr *CanalResultados) pruebaUnLider(replicas []string) string {
-	lider := -1
-	fmt.Println("lider")
-	for _, nodo := range replicas {
-		cliente, err := rpc.Dial("tcp", nodo)
-		check.CheckError(err, "Error test lider")
-
+	fmt.Println("Probar lider")
+	existeLider := "-1"
+	for _, replica := range replicas {
+		cliente, err := rpc.Dial("tcp", replica)
+		check.CheckError(err, "error tcp")
 		if cliente != nil {
 			reply := new(raft.ReplyEstado)
-			err = cliente.Call("NodoRaft.ObtenerEstado", struct{}{}, reply)
+			err = rpctimeout.CallTimeout(cliente, "NodoRaft.ObtenerEstado", struct{}{}, &reply, 25*time.Millisecond)
+			fmt.Println("Reply ", reply.Yo, reply)
 			if reply.Lider {
-				lider = reply.Yo
+				existeLider = replicas[reply.Yo]
 			}
+			check.CheckError(err, "Error al parar")
 		}
 	}
-	if lider != -1 {
-		return replicas[lider]
-	} else {
-		return "-1"
-	}
+	return existeLider
 }
 
 func (cr *CanalResultados) eliminarLider(lider string, replica []string) []string {

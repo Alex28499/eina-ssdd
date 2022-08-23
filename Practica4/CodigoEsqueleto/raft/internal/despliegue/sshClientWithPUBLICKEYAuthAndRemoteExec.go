@@ -77,11 +77,7 @@ func executeCmd(cmd, hostname string, config *ssh.ClientConfig) string {
 	session.Stdout = &stdoutBuf
 	session.Stderr = &stdoutBuf
 
-	fmt.Println("ANTES RUN", cmd)
-
 	session.Run(cmd)
-
-	fmt.Println("TRAS RUN", cmd)
 
 	return hostname + ": \n" + stdoutBuf.String()
 }
