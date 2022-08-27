@@ -1,7 +1,7 @@
 // Implementacion de despliegue en ssh de multiples nodos
 //
 // Unica funcion exportada :
-//		func ExecMutipleHosts(cmd string,
+//		func ExecMutipleNodes(cmd string,
 //							  hosts []string,
 //							  results chan<- string,
 //							  privKeyFile string)
@@ -13,8 +13,6 @@ import (
 	"bufio"
 	"bytes"
 	"fmt"
-
-	//"fmt"
 	"io/ioutil"
 	"log"
 	"os"
@@ -79,18 +77,13 @@ func executeCmd(cmd, hostname string, config *ssh.ClientConfig) string {
 	session.Stdout = &stdoutBuf
 	session.Stderr = &stdoutBuf
 
-	//fmt.Println("ANTES RUN", cmd)
-
 	session.Run(cmd)
-
-	fmt.Println("Run:" + cmd)
-
-	//fmt.Println("TRAS RUN", cmd)
 
 	return hostname + ": \n" + stdoutBuf.String()
 }
 
-func buildSSHConfig(signer ssh.Signer) *ssh.ClientConfig {
+func buildSSHConfig(signer ssh.Signer,
+	hostKey ssh.PublicKey) *ssh.ClientConfig {
 
 	return &ssh.ClientConfig{
 		User: os.Getenv("LOGNAME"),
@@ -107,22 +100,21 @@ func buildSSHConfig(signer ssh.Signer) *ssh.ClientConfig {
 	}
 }
 
-func execOneHost(hostname string, results chan<- string,
+func execOneNode(hostname string, results chan<- string,
 	signer ssh.Signer, cmd string) {
 	// get host public key
 	// ssh_config must have option "HashKnownHosts no" !!!!
-	//hostKey := getHostKey(hostname)
-	//config := buildSSHConfig(signer, hostKey)
-	config := buildSSHConfig(signer)
+	hostKey := getHostKey(hostname)
+	config := buildSSHConfig(signer, hostKey)
 
-	//fmt.Println(cmd)
-	//fmt.Println(hostname)
+	fmt.Println(cmd)
+	fmt.Println(hostname)
 
 	results <- executeCmd(cmd, hostname, config)
 }
 
 // Ejecutar un mismo comando en múltiples hosts mediante ssh
-func ExecMutipleHosts(cmd string,
+func ExecMutipleNodes(cmd string,
 	hosts []string,
 	results chan<- string,
 	privKeyFile string) {
@@ -132,9 +124,6 @@ func ExecMutipleHosts(cmd string,
 	//Read private key file for user
 	pkey, err := ioutil.ReadFile(
 		filepath.Join(os.Getenv("HOME"), ".ssh", privKeyFile))
-
-	//fmt.Println("PrivKey: ", string(pkey))
-
 	if err != nil {
 		log.Fatalf("unable to read private key: %v", err)
 	}
@@ -146,6 +135,6 @@ func ExecMutipleHosts(cmd string,
 	}
 
 	for _, hostname := range hosts {
-		go execOneHost(hostname, results, signer, cmd)
+		go execOneNode(hostname, results, signer, cmd)
 	}
 }

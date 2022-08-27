@@ -51,8 +51,10 @@ const (
 
 	// Cambiar esto para salida de logs en un directorio diferente
 	kLogOutputDir = "./logs_raft/"
+)
 
-	//RAFT node states
+//RAFT node states
+const (
 	Seguidor  = 0
 	Candidato = 1
 	Leader    = 2
@@ -108,9 +110,9 @@ type NodoRaft struct {
 
 }
 
-func (nr *NodoRaft) inicializarLogger(nodos []rpctimeout.HostPort, yo int) {
+func (nr *NodoRaft) inicializarLogger(nodo rpctimeout.HostPort) {
 	if kEnableDebugLogs {
-		nombreNodo := nodos[yo].Host() + "_" + nodos[yo].Port()
+		nombreNodo := nodo.Host() + "_" + nodo.Port()
 		logPrefix := fmt.Sprintf("%s", nombreNodo)
 
 		fmt.Println("LogPrefix: ", logPrefix)
@@ -156,7 +158,8 @@ func NuevoNodo(nodos []rpctimeout.HostPort, yo int,
 	nr := &NodoRaft{}
 	nr.Nodos = nodos
 	nr.Yo = yo
-	nr.IdLider = -1
+	nr.IdLider = IntNOINICIALIZADO
+	nr.inicializarLogger(nodos[yo])
 
 	nr.estado = Seguidor
 	nr.canalLat = make(chan bool)
@@ -165,11 +168,10 @@ func NuevoNodo(nodos []rpctimeout.HostPort, yo int,
 	nr.nextIndex = make([]int, len(nodos))
 	nr.matchIndex = make([]int, len(nodos))
 	nr.currentTerm = 0
-	nr.votedFor = -1
-	nr.comitIndex = 0
-	nr.lastApplied = 0
-	nr.log = []AplicaOperacion{}
-	nr.inicializarLogger(nr.Nodos, yo)
+	nr.votedFor = IntNOINICIALIZADO
+	nr.comitIndex = IntNOINICIALIZADO
+	nr.lastApplied = IntNOINICIALIZADO
+	//nr.log = []AplicaOperacion{}
 	go nr.gestionarSeguidor()
 
 	return nr
@@ -233,7 +235,7 @@ func (nr *NodoRaft) iniciarEleccion() {
 	minTimeout := 300
 	maxTimeout := 600
 	for {
-		nr.Logger.Println("esperoRespuesta()")
+		//nr.Logger.Println("esperoRespuesta()")
 		select {
 		case reply := <-nr.replyVChan:
 			if reply.Term > nr.currentTerm {
@@ -251,6 +253,7 @@ func (nr *NodoRaft) iniciarEleccion() {
 					nr.Mux.Lock()
 					nr.Logger.Println("Soy leader ----------------------------------------------------------------------------------------------------------------->")
 					nr.estado = Leader
+					nr.IdLider = nr.Yo
 					nr.Logger.Println(nr.estado)
 					for i := 0; i < len(nr.Nodos); i++ {
 						nr.nextIndex[i] = len(nr.log)
@@ -275,6 +278,7 @@ func (nr *NodoRaft) iniciarEleccion() {
 // de este nodo
 //
 func (nr *NodoRaft) para() {
+	nr.Logger.Println("Parando")
 	go func() { time.Sleep(5 * time.Millisecond); os.Exit(0) }()
 }
 
@@ -291,7 +295,6 @@ func (nr *NodoRaft) obtenerEstado() (int, int, bool, int) {
 	yo := nr.Yo
 
 	idLider := nr.IdLider
-	nr.Logger.Println("El idLider es ", idLider)
 
 	mandato := nr.currentTerm
 	esLider := false
@@ -404,6 +407,7 @@ type RespuestaPeticionVoto struct {
 func (nr *NodoRaft) PedirVoto(peticion *ArgsPeticionVoto,
 	reply *RespuestaPeticionVoto) error {
 	nr.Mux.Lock()
+	nr.Logger.Println("me piden voto", peticion)
 	defer nr.Mux.Unlock()
 	if peticion.Term >= nr.currentTerm && (nr.votedFor == -1 || nr.votedFor == peticion.CadidateId) && peticion.LastLogIndex >= nr.lastApplied {
 		nr.votedFor = peticion.CadidateId
@@ -541,8 +545,9 @@ func (nr *NodoRaft) callAppendEntry(nodo int, request *ArgAppendEntries) {
 //
 func (nr *NodoRaft) enviarPeticionVoto(nodo int, args *ArgsPeticionVoto,
 	reply *RespuestaPeticionVoto) bool {
-
+	nr.Logger.Println("pidiendo voto a", nr.Nodos[nodo])
 	ok := nr.Nodos[nodo].CallTimeout("NodoRaft.PedirVoto", &args, &reply, 150*time.Millisecond)
+	nr.Logger.Println("La respueste es ---->", nr.Nodos[nodo], ok, reply)
 	if ok == nil {
 		nr.replyVChan <- *reply
 	}

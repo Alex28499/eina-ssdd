@@ -448,7 +448,7 @@ func (nr *NodoRaft) iniciarElecion() {
 				votosConfimados++
 				if votosConfimados >= len(nr.nodos)/2 {
 					nr.mux.Lock()
-					nr.logger.Println("Soy leader ---------------------------->")
+					nr.logger.Println("Soy leader ----------------------------------------------------------------------------------------------------------------->")
 					nr.estado = Leader
 					nr.logger.Println(nr.estado)
 					for i := 0; i < len(nr.nodos); i++ {
