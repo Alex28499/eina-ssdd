@@ -20,9 +20,9 @@ const (
 	MAQUINA3      = "127.0.0.1"
 
 	//puertos
-	PUERTOREPLICA1 = "30013"
-	PUERTOREPLICA2 = "30014"
-	PUERTOREPLICA3 = "30015"
+	PUERTOREPLICA1 = "30030"
+	PUERTOREPLICA2 = "30031"
+	PUERTOREPLICA3 = "30032"
 
 	//nodos replicas
 	REPLICA1 = MAQUINA1 + ":" + PUERTOREPLICA1
@@ -105,7 +105,7 @@ func (cr *CanalResultados) startDistributedProcesses(
 
 		// dar tiempo para se establezcan las replicas
 	}
-	time.Sleep(5 * time.Second)
+	time.Sleep(8 * time.Second)
 
 }
 
@@ -129,7 +129,7 @@ func (cr *CanalResultados) stopDistributedProcesses(replicas []string) {
 
 // Se pone en marcha una replica ??
 func (cr *CanalResultados) soloArranqueYparadaTest1(t *testing.T) {
-	t.Skip("SKIPPED soloArranqueYparadaTest1")
+	//t.Skip("SKIPPED soloArranqueYparadaTest1")
 
 	fmt.Println(t.Name(), ".....................")
 
@@ -146,7 +146,7 @@ func (cr *CanalResultados) soloArranqueYparadaTest1(t *testing.T) {
 
 // Primer lider en marcha
 func (cr *CanalResultados) ElegirPrimerLiderTest2(t *testing.T) {
-	t.Skip("SKIPPED ElegirPrimerLiderTest2")
+	//t.Skip("SKIPPED ElegirPrimerLiderTest2")
 
 	fmt.Println(t.Name(), ".....................")
 
@@ -168,7 +168,7 @@ func (cr *CanalResultados) ElegirPrimerLiderTest2(t *testing.T) {
 
 // Fallo de un primer lider y reeleccion de uno nuevo
 func (cr *CanalResultados) FalloAnteriorElegirNuevoLiderTest3(t *testing.T) {
-	t.Skip("SKIPPED FalloAnteriorElegirNuevoLiderTest3")
+	//t.Skip("SKIPPED FalloAnteriorElegirNuevoLiderTest3")
 
 	fmt.Println(t.Name(), ".....................")
 
@@ -199,7 +199,7 @@ func (cr *CanalResultados) FalloAnteriorElegirNuevoLiderTest3(t *testing.T) {
 
 // 3 operaciones comprometidas con situacion estable y sin fallos
 func (cr *CanalResultados) tresOperacionesComprometidasEstableTest4(t *testing.T) {
-	//t.Skip("SKIPPED tresOperacionesComprometidasEstable")
+	t.Skip("SKIPPED tresOperacionesComprometidasEstable")
 
 	fmt.Println(t.Name(), ".....................")
 

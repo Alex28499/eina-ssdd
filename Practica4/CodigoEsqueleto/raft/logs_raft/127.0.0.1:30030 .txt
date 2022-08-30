@@ -1,0 +1,5 @@
+127.0.0.1:30030 10:39:40.104450 raft.go:47: logger initialized
+127.0.0.1:30030 10:39:40.104616 raft.go:171: gestionarSeguidor()
+127.0.0.1:30030 10:39:40.534436 raft.go:165: Obteniendo estado: 1
+127.0.0.1:30030 10:39:40.534492 raft.go:306: iniciarElecion()
+127.0.0.1:30030 10:39:40.534514 raft.go:343: pidiendo voto a 1
