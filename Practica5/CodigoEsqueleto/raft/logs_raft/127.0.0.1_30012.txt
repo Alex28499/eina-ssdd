@@ -1,0 +1,70 @@
+127.0.0.1_30012 -> 10:57:42.866583 raft.go:53: logger initialized
+127.0.0.1_30012 -> 10:57:42.866779 raft.go:244: Soy seguidor
+127.0.0.1_30012 -> 10:57:42.866829 raft.go:246: El timeout es de  205ms
+127.0.0.1_30012 -> 10:57:43.017961 raft.go:504: me pide voto &{1 0 0 0}
+127.0.0.1_30012 -> 10:57:43.071986 raft.go:244: Soy seguidor
+127.0.0.1_30012 -> 10:57:43.072035 raft.go:246: El timeout es de  155ms
+127.0.0.1_30012 -> 10:57:43.227643 raft.go:244: Soy seguidor
+127.0.0.1_30012 -> 10:57:43.227749 raft.go:246: El timeout es de  216ms
+127.0.0.1_30012 -> 10:57:43.443846 raft.go:244: Soy seguidor
+127.0.0.1_30012 -> 10:57:43.443920 raft.go:246: El timeout es de  280ms
+127.0.0.1_30012 -> 10:57:43.724769 raft.go:244: Soy seguidor
+127.0.0.1_30012 -> 10:57:43.724874 raft.go:246: El timeout es de  243ms
+127.0.0.1_30012 -> 10:57:43.968205 raft.go:244: Soy seguidor
+127.0.0.1_30012 -> 10:57:43.968315 raft.go:246: El timeout es de  294ms
+127.0.0.1_30012 -> 10:57:44.262783 raft.go:244: Soy seguidor
+127.0.0.1_30012 -> 10:57:44.262884 raft.go:246: El timeout es de  288ms
+127.0.0.1_30012 -> 10:57:44.551326 raft.go:244: Soy seguidor
+127.0.0.1_30012 -> 10:57:44.551423 raft.go:246: El timeout es de  156ms
+127.0.0.1_30012 -> 10:57:44.708513 raft.go:244: Soy seguidor
+127.0.0.1_30012 -> 10:57:44.708608 raft.go:246: El timeout es de  239ms
+127.0.0.1_30012 -> 10:57:44.948046 raft.go:244: Soy seguidor
+127.0.0.1_30012 -> 10:57:44.948137 raft.go:246: El timeout es de  181ms
+127.0.0.1_30012 -> 10:57:45.129735 raft.go:244: Soy seguidor
+127.0.0.1_30012 -> 10:57:45.129848 raft.go:246: El timeout es de  243ms
+127.0.0.1_30012 -> 10:57:45.373575 raft.go:244: Soy seguidor
+127.0.0.1_30012 -> 10:57:45.373700 raft.go:246: El timeout es de  260ms
+127.0.0.1_30012 -> 10:57:45.634086 raft.go:244: Soy seguidor
+127.0.0.1_30012 -> 10:57:45.634259 raft.go:246: El timeout es de  295ms
+127.0.0.1_30012 -> 10:57:45.929832 raft.go:244: Soy seguidor
+127.0.0.1_30012 -> 10:57:45.929923 raft.go:246: El timeout es de  202ms
+127.0.0.1_30012 -> 10:57:46.132444 raft.go:244: Soy seguidor
+127.0.0.1_30012 -> 10:57:46.132608 raft.go:246: El timeout es de  169ms
+127.0.0.1_30012 -> 10:57:46.302703 raft.go:244: Soy seguidor
+127.0.0.1_30012 -> 10:57:46.302822 raft.go:246: El timeout es de  151ms
+127.0.0.1_30012 -> 10:57:46.453885 raft.go:244: Soy seguidor
+127.0.0.1_30012 -> 10:57:46.454012 raft.go:246: El timeout es de  244ms
+127.0.0.1_30012 -> 10:57:46.698837 raft.go:244: Soy seguidor
+127.0.0.1_30012 -> 10:57:46.698973 raft.go:246: El timeout es de  180ms
+127.0.0.1_30012 -> 10:57:46.880040 raft.go:244: Soy seguidor
+127.0.0.1_30012 -> 10:57:46.880154 raft.go:246: El timeout es de  243ms
+127.0.0.1_30012 -> 10:57:47.123956 raft.go:244: Soy seguidor
+127.0.0.1_30012 -> 10:57:47.124091 raft.go:246: El timeout es de  184ms
+127.0.0.1_30012 -> 10:57:47.309023 raft.go:244: Soy seguidor
+127.0.0.1_30012 -> 10:57:47.309127 raft.go:246: El timeout es de  202ms
+127.0.0.1_30012 -> 10:57:47.511773 raft.go:244: Soy seguidor
+127.0.0.1_30012 -> 10:57:47.511894 raft.go:246: El timeout es de  259ms
+127.0.0.1_30012 -> 10:57:47.771681 raft.go:244: Soy seguidor
+127.0.0.1_30012 -> 10:57:47.771776 raft.go:246: El timeout es de  223ms
+127.0.0.1_30012 -> 10:57:47.995031 raft.go:244: Soy seguidor
+127.0.0.1_30012 -> 10:57:47.995181 raft.go:246: El timeout es de  181ms
+127.0.0.1_30012 -> 10:57:48.176765 raft.go:244: Soy seguidor
+127.0.0.1_30012 -> 10:57:48.176877 raft.go:246: El timeout es de  150ms
+127.0.0.1_30012 -> 10:57:48.327876 raft.go:244: Soy seguidor
+127.0.0.1_30012 -> 10:57:48.327966 raft.go:246: El timeout es de  269ms
+127.0.0.1_30012 -> 10:57:48.597259 raft.go:244: Soy seguidor
+127.0.0.1_30012 -> 10:57:48.597346 raft.go:246: El timeout es de  217ms
+127.0.0.1_30012 -> 10:57:48.815261 raft.go:244: Soy seguidor
+127.0.0.1_30012 -> 10:57:48.815362 raft.go:246: El timeout es de  275ms
+127.0.0.1_30012 -> 10:57:49.090935 raft.go:244: Soy seguidor
+127.0.0.1_30012 -> 10:57:49.091036 raft.go:246: El timeout es de  246ms
+127.0.0.1_30012 -> 10:57:49.338050 raft.go:244: Soy seguidor
+127.0.0.1_30012 -> 10:57:49.338153 raft.go:246: El timeout es de  209ms
+127.0.0.1_30012 -> 10:57:49.547850 raft.go:244: Soy seguidor
+127.0.0.1_30012 -> 10:57:49.547978 raft.go:246: El timeout es de  183ms
+127.0.0.1_30012 -> 10:57:49.731738 raft.go:244: Soy seguidor
+127.0.0.1_30012 -> 10:57:49.731854 raft.go:246: El timeout es de  270ms
+127.0.0.1_30012 -> 10:57:50.002654 raft.go:244: Soy seguidor
+127.0.0.1_30012 -> 10:57:50.002775 raft.go:246: El timeout es de  169ms
+127.0.0.1_30012 -> 10:57:50.172282 raft.go:244: Soy seguidor
+127.0.0.1_30012 -> 10:57:50.172332 raft.go:246: El timeout es de  159ms
