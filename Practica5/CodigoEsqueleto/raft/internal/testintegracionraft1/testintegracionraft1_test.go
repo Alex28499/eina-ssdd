@@ -23,9 +23,9 @@ const (
 	MAQUINA3 = "127.0.0.1"
 
 	//puertos
-	PUERTOREPLICA1 = "30010"
-	PUERTOREPLICA2 = "30011"
-	PUERTOREPLICA3 = "30012"
+	PUERTOREPLICA1 = "30106"
+	PUERTOREPLICA2 = "30107"
+	PUERTOREPLICA3 = "30108"
 	//nodos replicas
 	REPLICA1 = MAQUINA1 + ":" + PUERTOREPLICA1
 	REPLICA2 = MAQUINA2 + ":" + PUERTOREPLICA2
@@ -85,7 +85,7 @@ func TestPrimerasPruebas(t *testing.T) { // (m *testing.M) {
 
 // TEST primer rango
 func TestAcuerdosConFallos(t *testing.T) { // (m *testing.M) {
-	t.Skip("SKIPPED TestAcuerdosConFallos")
+	//t.Skip("SKIPPED TestAcuerdosConFallos")
 	// Crear canal de resultados de ejecuciones ssh en maquinas remotas
 	cfg := makeCfgDespliegue(t,
 		3,
@@ -231,16 +231,16 @@ func (cfg *configDespliegue) tresOperacionesComprometidasEstable(t *testing.T) {
 	cfg.t = t // Actualizar la estructura de datos de tests para errores
 
 	cfg.startDistributedProcesses()
-	time.Sleep(6 * time.Second)
 
 	cmds := []raft.TipoOperacion{
 		{Operacion: "leer", Clave: "1"},
 		{Operacion: "leer", Clave: "2"},
-		{Operacion: "escribir", Clave: "3", Valor: "mensaje"}}
-	cfg.someterOps(cmds)
-	time.Sleep(100 * time.Millisecond)
-	// Se comprueba que el commitIndex es 2 ya que se han comprometido 3 operaciones(0,1,2)
-	cfg.comprobarOp(2)
+		{Operacion: "leer", Clave: "3"}}
+	cfg.someterOperaciones(cmds)
+	time.Sleep(300 * time.Millisecond)
+
+	cfg.comprobarOpeacionesComprometidas(3)
+
 	// Parar réplicas alamcenamiento en remoto
 	cfg.stopDistributedProcesses() // Parametros
 
@@ -258,24 +258,24 @@ func (cfg *configDespliegue) AcuerdoApesarDeSeguidor(t *testing.T) {
 	time.Sleep(6 * time.Second)
 
 	cmd := raft.TipoOperacion{Operacion: "leer", Clave: "1"}
-	cfg.someterOp(cmd)
-	time.Sleep(100 * time.Millisecond)
+	cfg.someterOpeacion(cmd)
+	time.Sleep(300 * time.Millisecond)
 	// Se comprueba que el commitIndex es 2 ya que se han comprometido 3 operaciones(0,1,2)
-	cfg.comprobarOp(0)
+	cfg.comprobarOpeacionesComprometidas(1)
 	cfg.desconectarSeguidor()
 	cmds := []raft.TipoOperacion{
 		{Operacion: "leer", Clave: "2"},
 		{Operacion: "leer", Clave: "3"}}
-	cfg.someterOps(cmds)
-	time.Sleep(100 * time.Millisecond)
-	cfg.comprobarOp(3)
+	cfg.someterOperaciones(cmds)
+	time.Sleep(300 * time.Millisecond)
+	cfg.comprobarOpeacionesComprometidas(3)
 
 	cfg.startDistributedProcesses()
 	time.Sleep(6 * time.Second)
 
-	cfg.someterOps(cmds)
-	time.Sleep(100 * time.Millisecond)
-	cfg.comprobarOp(5)
+	cfg.someterOperaciones(cmds)
+	time.Sleep(300 * time.Millisecond)
+	cfg.comprobarOpeacionesComprometidas(5)
 	// Parar réplicas alamcenamiento en remoto
 	cfg.stopDistributedProcesses() // Parametros
 
@@ -293,25 +293,25 @@ func (cfg *configDespliegue) SinAcuerdoPorFallos(t *testing.T) {
 	time.Sleep(6 * time.Second)
 
 	cmd := raft.TipoOperacion{Operacion: "leer", Clave: "1"}
-	cfg.someterOp(cmd)
-	time.Sleep(100 * time.Millisecond)
+	cfg.someterOpeacion(cmd)
+	time.Sleep(300 * time.Millisecond)
 	// Se comprueba que el commitIndex es 2 ya que se han comprometido 3 operaciones(0,1,2)
-	cfg.comprobarOp(0)
+	cfg.comprobarOpeacionesComprometidas(1)
 	cfg.desconectarSeguidor()
 	cfg.desconectarSeguidor()
 	cmds := []raft.TipoOperacion{
 		{Operacion: "leer", Clave: "2"},
 		{Operacion: "leer", Clave: "3"}}
-	cfg.someterOps(cmds)
-	time.Sleep(100 * time.Millisecond)
-	cfg.comprobarOp(3)
+	cfg.someterOperaciones(cmds)
+	time.Sleep(300 * time.Millisecond)
+	cfg.comprobarOpeacionesComprometidas(3)
 
 	cfg.startDistributedProcesses()
 	time.Sleep(6 * time.Second)
 
-	cfg.someterOps(cmds)
-	time.Sleep(100 * time.Millisecond)
-	cfg.comprobarOp(5)
+	cfg.someterOperaciones(cmds)
+	time.Sleep(300 * time.Millisecond)
+	cfg.comprobarOpeacionesComprometidas(5)
 	// Parar réplicas alamcenamiento en remoto
 	cfg.stopDistributedProcesses() // Parametros
 
@@ -336,10 +336,10 @@ func (cfg *configDespliegue) SometerConcurrentementeOperaciones(t *testing.T) {
 
 	// Someter 5  operaciones concurrentes, un bucle para estabilizar la ejecucion
 	for _, cmd := range cmds {
-		go cfg.someterOps([]raft.TipoOperacion{cmd})
+		go cfg.someterOpeacion(cmd)
 	}
 	time.Sleep(1 * time.Second)
-	cfg.comprobarOp(3)
+	cfg.comprobarOpeacionesComprometidas(4)
 	// Parar réplicas alamcenamiento en remoto
 	cfg.stopDistributedProcesses()
 
@@ -488,13 +488,13 @@ func (cfg *configDespliegue) encontrarLider() int {
 	return idLeader
 }
 
-func (cfg *configDespliegue) someterOps(cmds []raft.TipoOperacion) {
+func (cfg *configDespliegue) someterOperaciones(cmds []raft.TipoOperacion) {
 	for _, cmd := range cmds {
-		cfg.someterOp(cmd)
+		cfg.someterOpeacion(cmd)
 	}
 }
 
-func (cfg *configDespliegue) someterOp(cmd raft.TipoOperacion) {
+func (cfg *configDespliegue) someterOpeacion(cmd raft.TipoOperacion) {
 	lider := cfg.encontrarLider()
 	var reply raft.ResultadoRemoto
 	err := cfg.nodosRaft[lider].CallTimeout("NodoRaft.SometerOperacionRaft",
@@ -502,20 +502,23 @@ func (cfg *configDespliegue) someterOp(cmd raft.TipoOperacion) {
 	check.CheckError(err, "Error en llamada RPC SometerOperacion")
 }
 
-func (cfg *configDespliegue) comprobarOp(n int) bool {
-	var reply bool
-	for i, endPoint := range cfg.nodosRaft {
-		if cfg.conectados[i] {
-			reply = false
-			err := endPoint.CallTimeout("NodoRaft.CheckCommits",
-				n, &reply, 50*time.Millisecond)
-			check.CheckError(err, "Error en llamada RPC CheckCommits nodo")
-			if !reply {
-				fmt.Println("El nodo ", i, " no tiene todas las entradas comprometidas")
-			} else {
-				fmt.Println("BIEN:", i)
-			}
+func (cfg *configDespliegue) comprobarOpeacionesComprometidas(n int) bool {
+	todasResp := []bool{false, false, false}
+	var resp bool
+	for idx, nodo := range cfg.nodosRaft {
+		if cfg.conectados[idx] {
+			resp = false
+			err := nodo.CallTimeout("NodoRaft.ObtenerCommitIdx", n, &resp, 50*time.Millisecond)
+			check.CheckError(err, "Error en llamada RPC ObtenerCommitIdx nodo")
+			todasResp[idx] = resp
 		}
 	}
-	return reply
+	for idx, resp := range todasResp {
+		if !resp {
+			cfg.t.Fatalf("Nodo %s no tiene todas las entradas, expected : %d",
+				cfg.nodosRaft[idx], n)
+			return false
+		}
+	}
+	return true
 }
